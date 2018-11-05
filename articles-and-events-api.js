@@ -1,3 +1,5 @@
+'use strict'
+
 console.log("Server Booting Up...")
 
 // Using express as my web server, create instance and set attributes
@@ -7,9 +9,6 @@ app.use(express.json())
 
 // Port this server will run on
 const port = 8080;
-
-// Module which contains the business logic for articles
-const articles_controller = require('./modules/articles-controller')
 
 // Home root currently redirects to /articles
 app.get('/', (req, res) => {
@@ -44,6 +43,36 @@ app.put('/articles/:article_id', (req, res) => {
 app.delete('/articles/:article_id', (req, res) => {
 
 	// Call controller to delete an article corresponding to the HTML request's article id
+})
+
+// GET Request to retrieve all events
+app.get('/events', (req, res) => {
+
+	// Call controller to retrieve all events
+})
+
+// GET Request to retrieve one event
+app.get('/events/:event_id', (req, res) => {
+
+	// Call controller to retrieve one event
+})
+
+// POST Request to create a new event
+app.post('/events', (req, res) => {
+
+	// Call controller to create a new event from the provided request
+})
+
+// PUT Request to update an event
+app.put('/events/:event_id', (req, res) => {
+
+	// Call controller to update an event at the provided id
+})
+
+// DELETE Request to delete one event
+app.delete('/events/:event_id', (req, res) => {
+
+	// Call controller to delete an event corresponding to the HTML request's event id
 })
 
 // Runs the server on provided port
