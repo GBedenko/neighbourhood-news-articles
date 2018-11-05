@@ -38,6 +38,20 @@ exports.updateResource = function() {
     // Update the given resource
 }
 
-exports.deleteResource = function(database_url, collection_name, articleID) {
-    // Delete the given resource
+// Delete a resource by its given ID
+exports.deleteResource = function(database_url, collection_name, resourceID) {
+
+    // Connect to the mongodb database
+    // Once done, runs the callback to execute the query to delete one resource matching the id
+    MongoClient.connect(database_url, function(err, db) {
+
+        if (err) throw err;
+        let dbo = db.db(database_name);
+
+        dbo.collection(collection_name).deleteOne({_id: new mongodb.ObjectID(resourceID)}, function(err, obj) {
+          if (err) throw err;
+          console.log("Resource with id " + articleID + " has been deleted");
+          db.close();
+        });
+      });
 }
