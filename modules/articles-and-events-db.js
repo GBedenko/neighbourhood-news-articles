@@ -26,12 +26,44 @@ exports.addResourceToCollection = function(database_url, collection_name, new_re
       });
 }
 
-exports.getAllFromCollection = function() {
-    // Retrieve all resources from a given collection
+// Retrieve all resources from a given collection
+exports.getAllFromCollection = function(database_url, collection_name, callback) {
+
+    // Connect to the mongodb database
+    // Once done, runs the callback to execute the query to find all resources in the given collection
+    MongoClient.connect(database_url, function(err, db) {
+
+        // If there's an error from the function call, exit with error message
+        if (err) throw err;
+
+        // Create an instance of the mongodb database
+        let dbo = db.db(database_name);
+
+        // Mongodb query to find all resources from the collection and save it to an array called results
+        // Once completed, pass the result as the parameter to the callback function
+        dbo.collection(collection_name).find({}).toArray(function(err, result) {
+          if (err) throw err;
+          db.close();
+          return callback(result);
+        });
+    });
 }
 
-exports.getResourceFromCollection = function() {
-    // Retrieve a specific resource from a collection
+// Retrieve a specific resource from a collection
+exports.getResourceFromCollection = function(database_url, collection_name, resource_id, callback) {
+
+    MongoClient.connect(database_url, function(err, db) {
+
+        if (err) throw err;
+        let dbo = db.db(database_name);
+
+        dbo.collection(collection_name).findOne({"_id": new mongodb.ObjectId(resource_id)}, function(err, result) {
+            if (err) throw err;
+            db.close();
+            return callback(result)
+        });
+    });
+
 }
 
 // Update a resource with the provided ID and new values object
