@@ -1,7 +1,7 @@
-const database_url = "mongodb://localhost:27017/yummy_articles"
+const database_url = "mongodb://localhost:27017/articles_and_events_database"
 const articles_collection = "articles"
 
-const database = require('./articles-db')
+const database = require('./articles-and-events-db')
 
 // Function to add a new article
 exports.add = function(articleObject, callback){
