@@ -4,7 +4,8 @@
   "description": "API for Articles and Events only (Part of Local News Application)",
   "main": "articles-and-events-api.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "eslint": "node_modules/.bin/eslint articles-and-events-api.js"
   },
   "jest": {
     "testEnvironment": "node",
