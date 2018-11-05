@@ -1,1 +1,1 @@
-# bedenkog-local-news-events
+# bedenkog-local-news-articles-and-events
