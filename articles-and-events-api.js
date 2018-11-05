@@ -11,7 +11,7 @@ app.use(express.json())
 const port = 8080;
 
 // Module which contains the business logic for articles
-const articles_controller = require('./modules/articles-controller')
+const articlesController = require('./modules/articles-controller')
 
 // Home root currently redirects to /articles
 app.get('/', (req, res) => {
@@ -23,7 +23,7 @@ app.get('/articles', (req, res) => {
 
 	// Call controller to retrieve all articles
 	// Once completed, callback function sends the result as a json string
-	articles_controller.getAll(null, (articles) => {
+	articlesController.getAll(null, (articles) => {
 		res.status(200).json(articles)
 	})
 })
@@ -33,7 +33,7 @@ app.get('/articles/:article_id', (req, res) => {
 
 	// Call controller to retrieve one article
 	// Once completed, callback function sends the result as a json string
-	articles_controller.getById(req.params.article_id, (article) => {
+	articlesController.getById(req.params.article_id, (article) => {
 		res.status(200).json(article)
 	})
 })
@@ -43,7 +43,7 @@ app.post('/articles', (req, res) => {
 
 	// Call controller to create a new article from the provided request
 	// Once completed, run the callback which sends the client a message and status code confirming the article was created
-	articles_controller.add(req.body, () => {
+	articlesController.add(req.body, () => {
 		res.status(201).send("New article created\n")
 	})
 })
@@ -53,7 +53,7 @@ app.put('/articles/:article_id', (req, res) => {
 
 	// Call controller to update an article at the provided id
 	// Once completed, run the callback which sends the client a message and status code confirming the article was updated
-	articles_controller.update(req.params.article_id, req.body, () => {
+	articlesController.update(req.params.article_id, req.body, () => {
 		res.status(200).send("article with id: " + req.params.article_id + " has been updated\n")
 	})
 })
@@ -63,7 +63,7 @@ app.delete('/articles/:article_id', (req, res) => {
 
 	// Call controller to delete an article corresponding to the HTML request's article id
 	// Once completed, return back to client a message and status code confirming the article was deleted
-	articles_controller.delete(req.params.article_id, () => {
+	articlesController.delete(req.params.article_id, () => {
 		res.status(200).send("article with id: " + req.params.article_id + " has been deleted\n")
 	})
 })
