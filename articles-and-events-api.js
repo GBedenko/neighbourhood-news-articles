@@ -65,13 +65,16 @@ app.put('/articles/:article_id', async(req, res) => {
 })
 
 // DELETE Request to delete one article
-app.delete('/articles/:article_id', (req, res) => {
+app.delete('/articles/:article_id', async(req, res) => {
 
 	// Call controller to delete an article corresponding to the HTML request's article id
-	// Once completed, return back to client a message and status code confirming the article was deleted
-	articlesController.delete(req.params.article_id, () => {
+	const articleDeleteResponse = await articlesController.delete(req.params.article_id)
+
+	if(articleDeleteResponse) {
 		res.status(200).send("article with id: " + req.params.article_id + " has been deleted\n")
-	})
+	} else {
+		res.status(400).send("There was an error deleting your article\n")
+	}
 })
 
 // GET Request to retrieve all events

@@ -56,7 +56,13 @@ exports.update = async(articleID, newarticleDetailsObject) => {
 };
 
 // Function to delete a article
-exports.delete = function(articleID, callback){
-    database.deleteResource(database_url, articles_collection, articleID)
-    callback() 
+exports.delete = async(articleID) => {
+
+    let deleteArticle = database.deleteResource(database_url, articles_collection, articleID)
+                            .then((article) => article)
+                            .catch((err) => console.log(err))
+
+    let deleteArticleResponse = await deleteArticle
+
+    return deleteArticleResponse
 };

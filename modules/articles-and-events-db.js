@@ -87,19 +87,20 @@ exports.updateResource = (database_url, collection_name, resourceID, new_values_
 })
 
 // Delete a resource by its given ID
-exports.deleteResource = (database_url, collection_name, resourceID) => {
+exports.deleteResource = (database_url, collection_name, resourceID) => new Promise((resolve, reject) => {
 
     // Connect to the mongodb database
     // Once done, runs the callback to execute the query to delete one resource matching the id
     MongoClient.connect(database_url, (err, db) => {
 
-        if (err) throw err;
-        let dbo = db.db(database_name);
+        if (err) reject(err)
+        let dbo = db.db(database_name)
 
         dbo.collection(collection_name).deleteOne({_id: new mongodb.ObjectID(resourceID)}, (err, obj) => {
-          if (err) throw err;
-          console.log("Resource with id " + resourceID + " has been deleted");
-          db.close();
+            if (err) reject(err)
+            console.log("Resource with id " + resourceID + " has been deleted")
+            db.close()
+            resolve(true)
         });
-      });
-}
+    });
+})
