@@ -29,13 +29,12 @@ app.get('/articles', async(req, res) => {
 })
 
 // GET Request to retrieve one article
-app.get('/articles/:article_id', (req, res) => {
+app.get('/articles/:article_id', async(req, res) => {
 
 	// Call controller to retrieve one article
-	// Once completed, callback function sends the result as a json string
-	articlesController.getById(req.params.article_id, (article) => {
-		res.status(200).json(article)
-	})
+	const article = await articlesController.getById(req.params.article_id)
+
+	res.status(200).json(article)	
 })
 
 // POST Request to create a new article

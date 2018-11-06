@@ -51,21 +51,21 @@ exports.getAllFromCollection = (database_url, collection_name) => new Promise((r
 
 
 // Retrieve a specific resource from a collection
-exports.getResourceFromCollection = (database_url, collection_name, resource_id, callback) => {
+exports.getResourceFromCollection = (database_url, collection_name, resource_id) => new Promise((resolve, reject) => {
 
     MongoClient.connect(database_url, (err, db) => {
 
-        if (err) throw err;
+        if (err) reject(err)
+
         let dbo = db.db(database_name);
 
         dbo.collection(collection_name).findOne({"_id": new mongodb.ObjectId(resource_id)}, (err, result) => {
-            if (err) throw err;
-            db.close();
-            return callback(result)
-        });
-    });
-
-}
+            if (err) reject(err)
+            db.close()
+            resolve(result)
+        })
+    })
+})
 
 // Update a resource with the provided ID and new values object
 exports.updateResource = (database_url, collection_name, resourceID, new_values_object) => {

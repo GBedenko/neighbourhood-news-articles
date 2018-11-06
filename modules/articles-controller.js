@@ -15,10 +15,15 @@ exports.add = async(articleObject) => {
 }
 
 // Function to retrieve one article
-exports.getById = function(articleId, callback){
-    database.getResourceFromCollection(database_url, articles_collection, articleId, function(article) {
-        return callback(article)
-    })
+exports.getById = async(articleId) => {
+
+    let getArticle = database.getResourceFromCollection(database_url, articles_collection, articleId)
+                    .then((article) => article)
+                    .catch((err) => console.log(err))
+    
+    let article = await getArticle
+
+    return article
 };
 
 // Function to retrieve all articles
