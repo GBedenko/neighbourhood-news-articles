@@ -12,14 +12,15 @@ const port = 8081;
 
 // Module which contains the business logic for articles
 const articlesController = require('./modules/articles-controller')
+const eventsController = require('./modules/events-controller')
 
 // Home root currently redirects to /articles
-app.get('/', (req, res) => {
-	res.redirect('/articles')
+app.get('/api/v1.0/', (req, res) => {
+	res.redirect('/api/v1.0/articles')
 })
 
 // GET Request to retrieve all articles
-app.get('/articles', async(req, res) => {
+app.get('/api/v1.0/articles', async(req, res) => {
 
 	// Call controller to retrieve all articles
 	// Waits for response from controller before continuing (async/await)
@@ -29,7 +30,7 @@ app.get('/articles', async(req, res) => {
 })
 
 // GET Request to retrieve one article
-app.get('/articles/:article_id', async(req, res) => {
+app.get('/api/v1.0/articles/:article_id', async(req, res) => {
 
 	// Call controller to retrieve one article
 	const article = await articlesController.getById(req.params.article_id)
@@ -38,7 +39,7 @@ app.get('/articles/:article_id', async(req, res) => {
 })
 
 // POST Request to create a new article
-app.post('/articles', async(req, res) => {
+app.post('/api/v1.0/articles', async(req, res) => {
 
 	// Call controller to create a new article from the provided request
 	// Once completed, run the callback which sends the client a message and status code confirming the article was created
@@ -52,7 +53,7 @@ app.post('/articles', async(req, res) => {
 })
 
 // PUT Request to update a article
-app.put('/articles/:article_id', async(req, res) => {
+app.put('/api/v1.0/articles/:article_id', async(req, res) => {
 
 	// Call controller to update an article at the provided id
 	const articleUpdateResponse = await articlesController.update(req.params.article_id, req.body)
@@ -65,7 +66,7 @@ app.put('/articles/:article_id', async(req, res) => {
 })
 
 // DELETE Request to delete one article
-app.delete('/articles/:article_id', async(req, res) => {
+app.delete('/api/v1.0/articles/:article_id', async(req, res) => {
 
 	// Call controller to delete an article corresponding to the HTML request's article id
 	const articleDeleteResponse = await articlesController.delete(req.params.article_id)
@@ -78,33 +79,62 @@ app.delete('/articles/:article_id', async(req, res) => {
 })
 
 // GET Request to retrieve all events
-app.get('/events', (req, res) => {
+app.get('/api/v1.0/events', async(req, res) => {
 
 	// Call controller to retrieve all events
+	// Waits for response from controller before continuing (async/await)
+	const events = await eventsController.getAll()
+
+	res.status(200).send(events)
 })
 
 // GET Request to retrieve one event
-app.get('/events/:event_id', (req, res) => {
+app.get('/api/v1.0/events/:event_id', async(req, res) => {
 
 	// Call controller to retrieve one event
+	const event = await eventsController.getById(req.params.event_id)
+
+	res.status(200).json(event)
 })
 
 // POST Request to create a new event
-app.post('/events', (req, res) => {
+app.post('/api/v1.0/events', async(req, res) => {
 
 	// Call controller to create a new event from the provided request
+	// Once completed, run the callback which sends the client a message and status code confirming the event was created
+	const eventCreateResponse = await eventsController.add(req.body)
+
+	if(eventCreateResponse) {
+		res.status(200).send("Event added succesfully\n")
+	} else {
+		res.status(400).send("There was an error posting your event\n")
+	}
 })
 
 // PUT Request to update an event
-app.put('/events/:event_id', (req, res) => {
+app.put('/api/v1.0/events/:event_id', async(req, res) => {
 
 	// Call controller to update an event at the provided id
+	const eventUpdateResponse = await eventsController.update(req.params.event_id, req.body)
+
+	if(eventUpdateResponse) {
+		res.status(200).send("Event with id: " + req.params.event_id + " has been updated\n")
+	} else {
+		res.status(400).send("There was an error updating your event\n")
+	}
 })
 
 // DELETE Request to delete one event
-app.delete('/events/:event_id', (req, res) => {
+app.delete('/api/v1.0/events/:event_id', async(req, res) => {
 
 	// Call controller to delete an event corresponding to the HTML request's event id
+	const eventDeleteResponse = await eventsController.delete(req.params.event_id)
+
+	if(eventDeleteResponse) {
+		res.status(200).send("Event with id: " + req.params.event_id + " has been deleted\n")
+	} else {
+		res.status(400).send("There was an error deleting your event\n")
+	}
 })
 
 // Runs the server on provided port

@@ -25,7 +25,7 @@ exports.getById = async(articleId) => {
     let article = await getArticle
 
     return article
-};
+}
 
 // Function to retrieve all articles
 exports.getAll = async() => {
@@ -53,7 +53,7 @@ exports.update = async(articleID, newarticleDetailsObject) => {
     let updateArticleResponse = await updateArticle
 
     return updateArticleResponse
-};
+}
 
 // Function to delete a article
 exports.delete = async(articleID) => {
