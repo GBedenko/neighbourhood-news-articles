@@ -83,7 +83,6 @@ app.get('/api/v1.0/events', async(req, res) => {
 
 	// Call controller to retrieve all events
 	// Waits for response from controller before continuing (async/await)
-
 	const events = await eventsController.getAll()
 
 	res.status(200).send(events)

@@ -25,7 +25,7 @@ exports.getById = async(articleId) => {
     let article = await getArticle
 
     return article
-};
+}
 
 // Function to retrieve all articles
 exports.getAll = async() => {
