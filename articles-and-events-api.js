@@ -22,10 +22,10 @@ app.get('/', (req, res) => {
 app.get('/articles', async(req, res) => {
 
 	// Call controller to retrieve all articles
-	// Once completed, callback function sends the result as a json string
-	let articles = await articlesController.getAll()
+	// Waits for response from controller before continuing (async/await)
+	const articles = await articlesController.getAll()
 
-	res.render('article', articles)
+	res.status(200).send(articles)
 })
 
 // GET Request to retrieve one article
@@ -39,13 +39,17 @@ app.get('/articles/:article_id', (req, res) => {
 })
 
 // POST Request to create a new article
-app.post('/articles', (req, res) => {
+app.post('/articles', async(req, res) => {
 
 	// Call controller to create a new article from the provided request
 	// Once completed, run the callback which sends the client a message and status code confirming the article was created
-	articlesController.add(req.body, () => {
-		res.status(201).send("New article created\n")
-	})
+	const response = await articlesController.add(req.body)
+	
+	if(response) {
+		res.status(200).send("Article added succesfully\n")
+	} else {
+		res.status(400).send("There was an error posting your article\n")
+	}
 })
 
 // PUT Request to update a article

@@ -4,10 +4,15 @@ const articles_collection = "articles"
 const database = require('./articles-and-events-db')
 
 // Function to add a new article
-exports.add = function(articleObject, callback){
-    database.addResourceToCollection(database_url, articles_collection, articleObject)
-    callback()
-};
+exports.add = async(articleObject) => {
+    
+    let addArticle = database.addResourceToCollection(database_url, articles_collection, articleObject)
+                        .then((result) => result)
+                        .catch((err) => console.log(err))
+
+    let addArticleResponse = await addArticle
+    return addArticleResponse
+}
 
 // Function to retrieve one article
 exports.getById = function(articleId, callback){
@@ -19,15 +24,18 @@ exports.getById = function(articleId, callback){
 // Function to retrieve all articles
 exports.getAll = async() => {
 
-    // Call database to add the new article record to the article collection
-    // Once done, pass the articles_list result as the parameter to the callback function
+    // Declare a function which will call the controller for all articles
+    // Returns a Promise object with either a resolve or reject value
     let results = database.getAllFromCollection(database_url, articles_collection)
-                    .then((results) => results)
-                    .catch((err) => console.log(err))
+                    .then((results) => results) // Obtains the result from the Promise object
+                    .catch((err) => console.log(err)) // If the result was an error then handle the error
     
+    // Calls the results function, waits for response before continuing
     let final_result = await results
+
+    // Return the list of articles
     return final_result
-};
+}
 
 // Function to update a article
 exports.update = (articleID, newarticleDetailsObject, callback) => {
