@@ -8,7 +8,7 @@ const app = express()
 app.use(express.json())
 
 // Port this server will run on
-const port = 8080;
+const port = 8081;
 
 // Module which contains the business logic for articles
 const articlesController = require('./modules/articles-controller')
