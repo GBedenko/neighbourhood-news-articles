@@ -39,19 +39,24 @@ exports.getAll = async() => {
     return events
 }
 
-
-
-
-
-
 // Function to update a event
-exports.update = function(eventID, newEventDetailsObject, callback){
-    database.updateResource(database_url, events_collection, eventID, newEventDetailsObject)
-    callback()
-};
+exports.update = async(eventID, newEventDetailsObject) => {
+
+    let updateEvent = database.updateResource(database_url, events_collection, eventID, newEventDetailsObject)
+                            .then((article) => article)
+                            .catch((err) => console.log(err))
+
+    let updateEventResponse = await updateEvent
+
+    return updateEventResponse
+}
 
 // Function to delete a event
-exports.delete = function(eventID, callback){
-    database.deleteResource(database_url, events_collection, eventID)
-    callback() 
-};
+exports.delete = async(eventID) => {
+
+    let deleteEvent = database.deleteResource(database_url, events_collection, eventID)
+
+    let deleteEventResponse = await deleteEvent
+
+    return deleteEventResponse
+}

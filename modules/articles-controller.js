@@ -53,7 +53,7 @@ exports.update = async(articleID, newarticleDetailsObject) => {
     let updateArticleResponse = await updateArticle
 
     return updateArticleResponse
-};
+}
 
 // Function to delete a article
 exports.delete = async(articleID) => {
