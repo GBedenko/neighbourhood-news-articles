@@ -68,23 +68,23 @@ exports.getResourceFromCollection = (database_url, collection_name, resource_id)
 })
 
 // Update a resource with the provided ID and new values object
-exports.updateResource = (database_url, collection_name, resourceID, new_values_object) => {
+exports.updateResource = (database_url, collection_name, resourceID, new_values_object) => new Promise((resolve, reject) => {
 
     // Connect to the mongodb database
     // Once done, runs the callback to execute the query to update the resource matching the id
     MongoClient.connect(database_url, (err, db) => {
 
-        if (err) throw err
+        if (err) reject(err)
         let dbo = db.db(database_name)
 
         dbo.collection(collection_name).updateOne({_id: new mongodb.ObjectID(resourceID)}, {$set:new_values_object}, (err, res) => {
-          if (err) throw err;
-          console.log("Resource with id " + resourceID + " has been updated");
-          db.close();
-        });
-    });
-
-}
+            if (err) reject(err)
+            console.log("Resource with id " + resourceID + " has been updated")
+            db.close()
+            resolve(true)
+        })
+    })
+})
 
 // Delete a resource by its given ID
 exports.deleteResource = (database_url, collection_name, resourceID) => {

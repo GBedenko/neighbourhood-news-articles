@@ -52,13 +52,16 @@ app.post('/articles', async(req, res) => {
 })
 
 // PUT Request to update a article
-app.put('/articles/:article_id', (req, res) => {
+app.put('/articles/:article_id', async(req, res) => {
 
 	// Call controller to update an article at the provided id
-	// Once completed, run the callback which sends the client a message and status code confirming the article was updated
-	articlesController.update(req.params.article_id, req.body, () => {
+	const articleUpdateResponse = await articlesController.update(req.params.article_id, req.body)
+
+	if(articleUpdateResponse) {
 		res.status(200).send("article with id: " + req.params.article_id + " has been updated\n")
-	})
+	} else {
+		res.status(400).send("There was an error updating your article\n")
+	}	
 })
 
 // DELETE Request to delete one article

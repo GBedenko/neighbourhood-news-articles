@@ -11,6 +11,7 @@ exports.add = async(articleObject) => {
                         .catch((err) => console.log(err))
 
     let addArticleResponse = await addArticle
+
     return addArticleResponse
 }
 
@@ -18,8 +19,8 @@ exports.add = async(articleObject) => {
 exports.getById = async(articleId) => {
 
     let getArticle = database.getResourceFromCollection(database_url, articles_collection, articleId)
-                    .then((article) => article)
-                    .catch((err) => console.log(err))
+                        .then((article) => article)
+                        .catch((err) => console.log(err))
     
     let article = await getArticle
 
@@ -43,9 +44,15 @@ exports.getAll = async() => {
 }
 
 // Function to update a article
-exports.update = (articleID, newarticleDetailsObject, callback) => {
-    database.updateResource(database_url, articles_collection, articleID, newarticleDetailsObject)
-    callback()
+exports.update = async(articleID, newarticleDetailsObject) => {
+
+    let updateArticle = database.updateResource(database_url, articles_collection, articleID, newarticleDetailsObject)
+                            .then((article) => article)
+                            .catch((err) => console.log(err))
+
+    let updateArticleResponse = await updateArticle
+
+    return updateArticleResponse
 };
 
 // Function to delete a article
