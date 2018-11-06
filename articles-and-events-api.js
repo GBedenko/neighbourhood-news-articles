@@ -14,12 +14,12 @@ const port = 8080;
 const articlesController = require('./modules/articles-controller')
 
 // Home root currently redirects to /articles
-app.get('/', (req, res) => {
-	res.redirect('/articles')
+app.get('/api/v1.0/', (req, res) => {
+	res.redirect('/api/v1.0/articles')
 })
 
 // GET Request to retrieve all articles
-app.get('/articles', async(req, res) => {
+app.get('/api/v1.0/articles', async(req, res) => {
 
 	// Call controller to retrieve all articles
 	// Waits for response from controller before continuing (async/await)
@@ -29,7 +29,7 @@ app.get('/articles', async(req, res) => {
 })
 
 // GET Request to retrieve one article
-app.get('/articles/:article_id', async(req, res) => {
+app.get('/api/v1.0/articles/:article_id', async(req, res) => {
 
 	// Call controller to retrieve one article
 	const article = await articlesController.getById(req.params.article_id)
@@ -38,7 +38,7 @@ app.get('/articles/:article_id', async(req, res) => {
 })
 
 // POST Request to create a new article
-app.post('/articles', async(req, res) => {
+app.post('/api/v1.0/articles', async(req, res) => {
 
 	// Call controller to create a new article from the provided request
 	// Once completed, run the callback which sends the client a message and status code confirming the article was created
@@ -52,7 +52,7 @@ app.post('/articles', async(req, res) => {
 })
 
 // PUT Request to update a article
-app.put('/articles/:article_id', async(req, res) => {
+app.put('/api/v1.0/articles/:article_id', async(req, res) => {
 
 	// Call controller to update an article at the provided id
 	const articleUpdateResponse = await articlesController.update(req.params.article_id, req.body)
@@ -65,7 +65,7 @@ app.put('/articles/:article_id', async(req, res) => {
 })
 
 // DELETE Request to delete one article
-app.delete('/articles/:article_id', async(req, res) => {
+app.delete('/api/v1.0/articles/:article_id', async(req, res) => {
 
 	// Call controller to delete an article corresponding to the HTML request's article id
 	const articleDeleteResponse = await articlesController.delete(req.params.article_id)
@@ -78,31 +78,31 @@ app.delete('/articles/:article_id', async(req, res) => {
 })
 
 // GET Request to retrieve all events
-app.get('/events', (req, res) => {
+app.get('/api/v1.0/events', (req, res) => {
 
 	// Call controller to retrieve all events
 })
 
 // GET Request to retrieve one event
-app.get('/events/:event_id', (req, res) => {
+app.get('/api/v1.0/events/:event_id', (req, res) => {
 
 	// Call controller to retrieve one event
 })
 
 // POST Request to create a new event
-app.post('/events', (req, res) => {
+app.post('/api/v1.0/events', (req, res) => {
 
 	// Call controller to create a new event from the provided request
 })
 
 // PUT Request to update an event
-app.put('/events/:event_id', (req, res) => {
+app.put('/api/v1.0/events/:event_id', (req, res) => {
 
 	// Call controller to update an event at the provided id
 })
 
 // DELETE Request to delete one event
-app.delete('/events/:event_id', (req, res) => {
+app.delete('/api/v1.0/events/:event_id', (req, res) => {
 
 	// Call controller to delete an event corresponding to the HTML request's event id
 })
