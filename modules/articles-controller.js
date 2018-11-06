@@ -4,38 +4,65 @@ const articles_collection = "articles"
 const database = require('./articles-and-events-db')
 
 // Function to add a new article
-exports.add = function(articleObject, callback){
-    database.addResourceToCollection(database_url, articles_collection, articleObject)
-    callback()
-};
+exports.add = async(articleObject) => {
+    
+    let addArticle = database.addResourceToCollection(database_url, articles_collection, articleObject)
+                        .then((result) => result)
+                        .catch((err) => console.log(err))
+
+    let addArticleResponse = await addArticle
+
+    return addArticleResponse
+}
 
 // Function to retrieve one article
-exports.getById = function(articleId, callback){
-    database.getResourceFromCollection(database_url, articles_collection, articleId, function(article) {
-        return callback(article)
-    })
+exports.getById = async(articleId) => {
+
+    let getArticle = database.getResourceFromCollection(database_url, articles_collection, articleId)
+                        .then((article) => article)
+                        .catch((err) => console.log(err))
+    
+    let article = await getArticle
+
+    return article
 };
 
 // Function to retrieve all articles
-exports.getAll = function(err, callback){
-    // If there's an error from the function call, exit with error message
-    if (err) throw err;
+exports.getAll = async() => {
 
-    // Call database to add the new article record to the article collection
-    // Once done, pass the articles_list result as the parameter to the callback function
-    database.getAllFromCollection(database_url, articles_collection, function(articles_list) {
-        return callback(articles_list)
-    })
-};
+    // Declare a function which will call the controller for all articles
+    // Returns a Promise object with either a resolve or reject value
+    let results = database.getAllFromCollection(database_url, articles_collection)
+                    .then((results) => results) // Obtains the result from the Promise object
+                    .catch((err) => console.log(err)) // If the result was an error then handle the error
+    
+    // Calls the results function, waits for response before continuing
+    let final_result = await results
+
+    // Return the list of articles
+    return final_result
+}
 
 // Function to update a article
-exports.update = function(articleID, newarticleDetailsObject, callback){
-    database.updateResource(database_url, articles_collection, articleID, newarticleDetailsObject)
-    callback()
+exports.update = async(articleID, newarticleDetailsObject) => {
+
+    let updateArticle = database.updateResource(database_url, articles_collection, articleID, newarticleDetailsObject)
+                            .then((article) => article)
+                            .catch((err) => console.log(err))
+
+    let updateArticleResponse = await updateArticle
+
+    return updateArticleResponse
 };
 
 // Function to delete a article
-exports.delete = function(articleID, callback){
-    database.deleteResource(database_url, articles_collection, articleID)
-    callback() 
+exports.delete = async(articleID) => {
+
+    let deleteArticle = database.deleteResource(database_url, articles_collection, articleID)
+                            .then((article) => article)
+                            .catch((err) => console.log(err))
+
+    let deleteArticleResponse = await deleteArticle
+
+    return deleteArticleResponse
 };

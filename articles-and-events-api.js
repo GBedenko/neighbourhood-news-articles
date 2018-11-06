@@ -19,53 +19,62 @@ app.get('/', (req, res) => {
 })
 
 // GET Request to retrieve all articles
-app.get('/articles', (req, res) => {
+app.get('/articles', async(req, res) => {
 
 	// Call controller to retrieve all articles
-	// Once completed, callback function sends the result as a json string
-	articlesController.getAll(null, (articles) => {
-		res.status(200).json(articles)
-	})
+	// Waits for response from controller before continuing (async/await)
+	const articles = await articlesController.getAll()
+
+	res.status(200).send(articles)
 })
 
 // GET Request to retrieve one article
-app.get('/articles/:article_id', (req, res) => {
+app.get('/articles/:article_id', async(req, res) => {
 
 	// Call controller to retrieve one article
-	// Once completed, callback function sends the result as a json string
-	articlesController.getById(req.params.article_id, (article) => {
-		res.status(200).json(article)
-	})
+	const article = await articlesController.getById(req.params.article_id)
+
+	res.status(200).json(article)	
 })
 
 // POST Request to create a new article
-app.post('/articles', (req, res) => {
+app.post('/articles', async(req, res) => {
 
 	// Call controller to create a new article from the provided request
 	// Once completed, run the callback which sends the client a message and status code confirming the article was created
-	articlesController.add(req.body, () => {
-		res.status(201).send("New article created\n")
-	})
+	const response = await articlesController.add(req.body)
+	
+	if(response) {
+		res.status(200).send("Article added succesfully\n")
+	} else {
+		res.status(400).send("There was an error posting your article\n")
+	}
 })
 
 // PUT Request to update a article
-app.put('/articles/:article_id', (req, res) => {
+app.put('/articles/:article_id', async(req, res) => {
 
 	// Call controller to update an article at the provided id
-	// Once completed, run the callback which sends the client a message and status code confirming the article was updated
-	articlesController.update(req.params.article_id, req.body, () => {
+	const articleUpdateResponse = await articlesController.update(req.params.article_id, req.body)
+
+	if(articleUpdateResponse) {
 		res.status(200).send("article with id: " + req.params.article_id + " has been updated\n")
-	})
+	} else {
+		res.status(400).send("There was an error updating your article\n")
+	}	
 })
 
 // DELETE Request to delete one article
-app.delete('/articles/:article_id', (req, res) => {
+app.delete('/articles/:article_id', async(req, res) => {
 
 	// Call controller to delete an article corresponding to the HTML request's article id
-	// Once completed, return back to client a message and status code confirming the article was deleted
-	articlesController.delete(req.params.article_id, () => {
+	const articleDeleteResponse = await articlesController.delete(req.params.article_id)
+
+	if(articleDeleteResponse) {
 		res.status(200).send("article with id: " + req.params.article_id + " has been deleted\n")
-	})
+	} else {
+		res.status(400).send("There was an error deleting your article\n")
+	}
 })
 
 // GET Request to retrieve all events
