@@ -27,27 +27,29 @@ exports.addResourceToCollection = function(database_url, collection_name, new_re
 }
 
 // Retrieve all resources from a given collection
-exports.getAllFromCollection = function(database_url, collection_name, callback) {
+exports.getAllFromCollection = (database_url, collection_name) => new Promise((resolve, reject) => {
 
-    // Connect to the mongodb database
-    // Once done, runs the callback to execute the query to find all resources in the given collection
-    MongoClient.connect(database_url, function(err, db) {
+        // Connect to the mongodb database
+        // Once done, runs the callback to execute the query to find all resources in the given collection
+        MongoClient.connect(database_url, function(err, db) {
+            console.log(err)
+            console.log(db)
+            // If there's an error from the function call, exit with error message
+            if (err) reject(err)
 
-        // If there's an error from the function call, exit with error message
-        if (err) throw err;
+            // Create an instance of the mongodb database
+            let dbo = db.db(database_name);
 
-        // Create an instance of the mongodb database
-        let dbo = db.db(database_name);
-
-        // Mongodb query to find all resources from the collection and save it to an array called results
-        // Once completed, pass the result as the parameter to the callback function
-        dbo.collection(collection_name).find({}).toArray(function(err, result) {
-          if (err) throw err;
-          db.close();
-          return callback(result);
+            // Mongodb query to find all resources from the collection and save it to an array called results
+            // Once completed, pass the result as the parameter to the callback function
+            dbo.collection(collection_name).find({}).toArray(function(err, result) {
+                    if (err) reject(err)
+                    db.close()
+                    resolve(result)
+            });
         });
-    });
-}
+    })
+
 
 // Retrieve a specific resource from a collection
 exports.getResourceFromCollection = function(database_url, collection_name, resource_id, callback) {

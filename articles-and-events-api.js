@@ -19,13 +19,13 @@ app.get('/', (req, res) => {
 })
 
 // GET Request to retrieve all articles
-app.get('/articles', (req, res) => {
+app.get('/articles', async(req, res) => {
 
 	// Call controller to retrieve all articles
 	// Once completed, callback function sends the result as a json string
-	articlesController.getAll(null, (articles) => {
-		res.status(200).json(articles)
-	})
+	let articles = await articlesController.getAll()
+
+	res.render('article', articles)
 })
 
 // GET Request to retrieve one article

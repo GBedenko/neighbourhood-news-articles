@@ -17,19 +17,20 @@ exports.getById = function(articleId, callback){
 };
 
 // Function to retrieve all articles
-exports.getAll = function(err, callback){
-    // If there's an error from the function call, exit with error message
-    if (err) throw err;
+exports.getAll = async() => {
 
     // Call database to add the new article record to the article collection
     // Once done, pass the articles_list result as the parameter to the callback function
-    database.getAllFromCollection(database_url, articles_collection, function(articles_list) {
-        return callback(articles_list)
-    })
+    let results = database.getAllFromCollection(database_url, articles_collection)
+                    .then((results) => results)
+                    .catch((err) => console.log(err))
+    
+    let final_result = await results
+    return final_result
 };
 
 // Function to update a article
-exports.update = function(articleID, newarticleDetailsObject, callback){
+exports.update = (articleID, newarticleDetailsObject, callback) => {
     database.updateResource(database_url, articles_collection, articleID, newarticleDetailsObject)
     callback()
 };
