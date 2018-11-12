@@ -65,4 +65,4 @@ exports.delete = async(articleID) => {
     let deleteArticleResponse = await deleteArticle
 
     return deleteArticleResponse
-};
+}

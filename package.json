@@ -10,7 +10,8 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "verbose": true
+    "verbose": true,
+    "automock": true
   },
   "repository": {
     "type": "git",
