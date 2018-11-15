@@ -11,13 +11,13 @@ articlesAndEventsDB.addResourceToCollection = (databaseURL, collectionName, newR
 // Mock retrieve all resources from a given collection
 articlesAndEventsDB.getAllFromCollection = (databaseURL, collectionName) => new Promise((resolve, reject) => {
 
-    resolve([{"_id": 1234 , "heading":"Test Heading"}])
+    resolve([{"_id": 1234 , "heading": "Test Heading"}])
 })
 
 // Mock retrieve a specific resource from a collection
 articlesAndEventsDB.getResourceFromCollection = (databaseURL, collectionName, resourceID) => new Promise((resolve, reject) => {
 
-    resolve({"_id": 1234, "heading":"Test Heading"})
+    resolve({"_id": 1234, "heading": "Test Heading"})
 })
 
 
