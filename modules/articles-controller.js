@@ -1,16 +1,17 @@
-const database_url = "mongodb://localhost:27017/articles_and_events_database"
-const articles_collection = "articles"
+'use strict'
+
+const databaseURL = "mongodb://localhost:27017/articles_and_events_database"
+const articlesCollection = "articles"
 
 const database = require('./articles-and-events-db')
 
 // Function to add a new article
 exports.add = async(articleObject) => {
     
-    let addArticle = database.addResourceToCollection(database_url, articles_collection, articleObject)
+    const addArticle = database.addResourceToCollection(databaseURL, articlesCollection, articleObject)
                         .then((result) => result)
-                        .catch((err) => console.log(err))
 
-    let addArticleResponse = await addArticle
+    const addArticleResponse = await addArticle
 
     return addArticleResponse
 }
@@ -18,11 +19,10 @@ exports.add = async(articleObject) => {
 // Function to retrieve one article
 exports.getById = async(articleId) => {
 
-    let getArticle = database.getResourceFromCollection(database_url, articles_collection, articleId)
+    const getArticle = database.getResourceFromCollection(databaseURL, articlesCollection, articleId)
                         .then((article) => article)
-                        .catch((err) => console.log(err))
     
-    let article = await getArticle
+    const article = await getArticle
 
     return article
 }
@@ -32,25 +32,23 @@ exports.getAll = async() => {
 
     // Declare a function which will call the controller for all articles
     // Returns a Promise object with either a resolve or reject value
-    let results = database.getAllFromCollection(database_url, articles_collection)
+    const articles = database.getAllFromCollection(databaseURL, articlesCollection)
                     .then((results) => results) // Obtains the result from the Promise object
-                    .catch((err) => console.log(err)) // If the result was an error then handle the error
     
     // Calls the results function, waits for response before continuing
-    let final_result = await results
+    const articlesResponse = await articles
 
     // Return the list of articles
-    return final_result
+    return articlesResponse
 }
 
 // Function to update a article
-exports.update = async(articleID, newarticleDetailsObject) => {
+exports.update = async(articleID, newArticleDetailsObject) => {
 
-    let updateArticle = database.updateResource(database_url, articles_collection, articleID, newarticleDetailsObject)
+    const updateArticle = database.updateResource(databaseURL, articlesCollection, articleID, newArticleDetailsObject)
                             .then((article) => article)
-                            .catch((err) => console.log(err))
 
-    let updateArticleResponse = await updateArticle
+    const updateArticleResponse = await updateArticle
 
     return updateArticleResponse
 }
@@ -58,11 +56,10 @@ exports.update = async(articleID, newarticleDetailsObject) => {
 // Function to delete a article
 exports.delete = async(articleID) => {
 
-    let deleteArticle = database.deleteResource(database_url, articles_collection, articleID)
+    const deleteArticle = database.deleteResource(databaseURL, articlesCollection, articleID)
                             .then((article) => article)
-                            .catch((err) => console.log(err))
 
-    let deleteArticleResponse = await deleteArticle
+    const deleteArticleResponse = await deleteArticle
 
     return deleteArticleResponse
-};
+}

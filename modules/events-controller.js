@@ -1,16 +1,18 @@
-const database_url = "mongodb://localhost:27017/events_and_events_database"
-const events_collection = "events"
+'use strict'
+
+const databaseURL = "mongodb://localhost:27017/articles_and_events_database"
+const eventsCollection = "events"
 
 const database = require('./articles-and-events-db')
 
 // Function to add a new event
 exports.add = async(eventObject) => {
 
-    let addEvent = database.addResourceToCollection(database_url, events_collection, eventObject)
+    const addEvent = database.addResourceToCollection(databaseURL, eventsCollection, eventObject)
                         .then((result) => result)
                         .catch((err) => console.log(err))
 
-    let addEventResponse = await addEvent
+    const addEventResponse = await addEvent
 
     return addEventResponse
 }
@@ -18,11 +20,11 @@ exports.add = async(eventObject) => {
 // Function to retrieve one event
 exports.getById = async(eventId) => {
 
-    let getEvent = database.getResourceFromCollection(database_url, events_collection, eventId)
+    const getEvent = database.getResourceFromCollection(databaseURL, eventsCollection, eventId)
                         .then((event) => event)
                         .catch((err) => console.log(err))
 
-    let event = await getEvent
+    const event = await getEvent
 
     return event
 }
@@ -30,11 +32,11 @@ exports.getById = async(eventId) => {
 // Function to retrieve all events
 exports.getAll = async() => {
 
-    let getEvents = database.getAllFromCollection(database_url, events_collection)
+    const getEvents = database.getAllFromCollection(databaseURL, eventsCollection)
                         .then((events) => events) // Obtains the result from the Promise object
                         .catch((err) => console.log(err)) // If the result was an error then handle the error
 
-    let events = getEvents
+    const events = getEvents
 
     return events
 }
@@ -42,11 +44,11 @@ exports.getAll = async() => {
 // Function to update a event
 exports.update = async(eventID, newEventDetailsObject) => {
 
-    let updateEvent = database.updateResource(database_url, events_collection, eventID, newEventDetailsObject)
+    const updateEvent = database.updateResource(databaseURL, eventsCollection, eventID, newEventDetailsObject)
                             .then((article) => article)
                             .catch((err) => console.log(err))
 
-    let updateEventResponse = await updateEvent
+    const updateEventResponse = await updateEvent
 
     return updateEventResponse
 }
@@ -54,9 +56,9 @@ exports.update = async(eventID, newEventDetailsObject) => {
 // Function to delete a event
 exports.delete = async(eventID) => {
 
-    let deleteEvent = database.deleteResource(database_url, events_collection, eventID)
+    const deleteEvent = database.deleteResource(databaseURL, eventsCollection, eventID)
 
-    let deleteEventResponse = await deleteEvent
+    const deleteEventResponse = await deleteEvent
 
     return deleteEventResponse
 }
