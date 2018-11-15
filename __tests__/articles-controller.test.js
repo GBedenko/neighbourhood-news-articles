@@ -25,7 +25,7 @@ describe('Get all articles controller functionality', () => {
         expect.assertions(1)
         
         const response = await articlesController.getAll()
-        console.log(response)
+        
         expect(response).toEqual([{"_id": 1234, "heading":"Test Heading"}])
         
         done()

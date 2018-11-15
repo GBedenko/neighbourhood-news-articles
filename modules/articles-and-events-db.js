@@ -104,3 +104,19 @@ exports.deleteResource = (database_url, collection_name, resourceID) => new Prom
         });
     });
 })
+
+// Find a resource by a query object
+exports.findResourceFromCollection = (database_url, collection_name, resource_object) => new Promise((resolve, reject) => {
+
+    MongoClient.connect(database_url, function(err, db) {
+
+        if (err) reject(err);
+        let dbo = db.db(database_name)
+
+        dbo.collection(collection_name).find(resource_object).toArray((err, result) => {
+          if (err) reject(err);
+          db.close();
+          resolve(result)
+        });
+    });
+})
