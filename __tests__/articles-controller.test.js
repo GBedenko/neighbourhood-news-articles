@@ -2,6 +2,8 @@
 
 const articlesController = require('../modules/articles-controller')
 
+jest.mock('../modules/articles-and-events-db')
+
 describe('Add articles controller functionality', async() => {
 
 	test('Recieving a new article sends it to the database', async done => {
@@ -24,7 +26,7 @@ describe('Get all articles controller functionality', () => {
         
         const response = await articlesController.getAll()
         console.log(response)
-        expect(response).toBe([{"_id": "1234" , "heading":"Test Heading"}])
+        expect(response).toEqual([{"_id": 1234, "heading":"Test Heading"}])
         
         done()
 	})
@@ -38,7 +40,7 @@ describe('Get one article controller functionality', () => {
         
         const response = await articlesController.getById("1234")
 
-        expect(response).toBe({"_id":1234, "heading":"Test Heading"})
+        expect(response).toEqual({"_id": 1234, "heading":"Test Heading"})
         
         done()
 	})

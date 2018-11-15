@@ -1,4 +1,4 @@
-const database_url = "mongodb://localhost:27017/events_and_events_database"
+const database_url = "mongodb://localhost:27017/articles_and_events_database"
 const events_collection = "events"
 
 const database = require('./articles-and-events-db')
