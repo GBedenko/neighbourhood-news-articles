@@ -13,12 +13,9 @@ exports.addResourceToCollection = (database_url, collection_name, new_resource) 
     // Once done, runs the callback to execute the query to add a new resource to the given collection
     MongoClient.connect(database_url, (err, db) => {
 
-        if (err) reject(err)
-
         let dbo = db.db(database_name)
 
         dbo.collection(collection_name).insertOne(new_resource, (err, res) => {
-            if (err) reject(err)
             console.log("Document inserted to mongodb database: " + database_name + ", collection: " + collection_name);
             db.close();
             resolve(true)
@@ -33,16 +30,12 @@ exports.getAllFromCollection = (database_url, collection_name) => new Promise((r
     // Once done, runs the callback to execute the query to find all resources in the given collection
     MongoClient.connect(database_url, (err, db) => {
         
-        // If there's an error from the function call, exit with error message
-        if (err) reject(err)
-
         // Create an instance of the mongodb database
         let dbo = db.db(database_name);
 
         // Mongodb query to find all resources from the collection and save it to an array called results
         // Once completed, pass the result as the parameter to the callback function
         dbo.collection(collection_name).find({}).toArray((err, result) => {
-            if (err) reject(err)
             db.close()
             resolve(result)
         });
@@ -55,12 +48,9 @@ exports.getResourceFromCollection = (database_url, collection_name, resource_id)
 
     MongoClient.connect(database_url, (err, db) => {
 
-        if (err) reject(err)
-
         let dbo = db.db(database_name);
 
         dbo.collection(collection_name).findOne({"_id": new mongodb.ObjectId(resource_id)}, (err, result) => {
-            if (err) reject(err)
             db.close()
             resolve(result)
         })
@@ -74,11 +64,9 @@ exports.updateResource = (database_url, collection_name, resourceID, new_values_
     // Once done, runs the callback to execute the query to update the resource matching the id
     MongoClient.connect(database_url, (err, db) => {
 
-        if (err) reject(err)
         let dbo = db.db(database_name)
 
         dbo.collection(collection_name).updateOne({_id: new mongodb.ObjectID(resourceID)}, {$set:new_values_object}, (err, res) => {
-            if (err) reject(err)
             console.log("Resource with id " + resourceID + " has been updated")
             db.close()
             resolve(true)
@@ -93,11 +81,9 @@ exports.deleteResource = (database_url, collection_name, resourceID) => new Prom
     // Once done, runs the callback to execute the query to delete one resource matching the id
     MongoClient.connect(database_url, (err, db) => {
 
-        if (err) reject(err)
         let dbo = db.db(database_name)
 
         dbo.collection(collection_name).deleteOne({_id: new mongodb.ObjectID(resourceID)}, (err, obj) => {
-            if (err) reject(err)
             console.log("Resource with id " + resourceID + " has been deleted")
             db.close()
             resolve(true)
@@ -110,11 +96,9 @@ exports.findResourceFromCollection = (database_url, collection_name, resource_ob
 
     MongoClient.connect(database_url, function(err, db) {
 
-        if (err) reject(err);
         let dbo = db.db(database_name)
 
         dbo.collection(collection_name).find(resource_object).toArray((err, result) => {
-          if (err) reject(err);
           db.close();
           resolve(result)
         });
