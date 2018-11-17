@@ -1,10 +1,12 @@
 {
-  "name": "bedenkog-local-news-events",
+  "name": "bedenkog-local-news-articles-and-events",
   "version": "1.0.0",
-  "description": "API for Events only (Part of Local News Application)",
-  "main": "events-api.js",
+  "description": "API for Articles and Events only (Part of Local News Application)",
+  "main": "articles-and-events-api.js",
   "scripts": {
-    "test": "jest --coverage"
+    "start": "node articles-and-events-api.js",
+    "test": "jest --coverage",
+    "eslint": "node_modules/.bin/eslint articles-and-events-api.js"
   },
   "jest": {
     "testEnvironment": "node",
@@ -12,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.coventry.ac.uk/340CT-1819SEPJAN/bedenkog-local-news-events"
+    "url": "https://github.coventry.ac.uk/340CT-1819SEPJAN/bedenkog-local-news-articles-and-events"
   },
   "author": "bedenkog",
   "license": "ISC",
@@ -20,5 +22,8 @@
     "express": "^4.16.4",
     "jest": "^23.6.0",
     "mongodb": "^3.1.8"
+  },
+  "devDependencies": {
+    "eslint": "^5.8.0"
   }
 }
