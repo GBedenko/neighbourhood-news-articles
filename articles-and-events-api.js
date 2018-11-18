@@ -1,6 +1,6 @@
 'use strict'
 
-console.log("Server Booting Up...")
+console.log("Booting Up Articles and Events API Server...")
 
 // Using express as my web server, create instance and set attributes
 const express = require('express')
