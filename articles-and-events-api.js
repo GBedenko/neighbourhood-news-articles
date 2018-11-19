@@ -24,7 +24,7 @@ app.get('/api/v1.0/articles', async(req, res) => {
 
 	// Call controller to retrieve all articles
 	// Waits for response from controller before continuing (async/await)
-	const articles = await articlesController.getAll()
+	const articles = await articlesController.getByQuery(req.body)
 
 	res.status(200).send(articles)
 })
@@ -54,6 +54,9 @@ app.post('/api/v1.0/articles', async(req, res) => {
 
 // PUT Request to update a article
 app.put('/api/v1.0/articles/:article_id', async(req, res) => {
+	
+	console.log(req.body)
+	delete req.body._id
 
 	// Call controller to update an article at the provided id
 	const articleUpdateResponse = await articlesController.update(req.params.article_id, req.body)
@@ -83,7 +86,7 @@ app.get('/api/v1.0/events', async(req, res) => {
 
 	// Call controller to retrieve all events
 	// Waits for response from controller before continuing (async/await)
-	const events = await eventsController.getAll()
+	const events = await eventsController.getByQuery(req.body)
 
 	res.status(200).send(events)
 })
@@ -135,6 +138,17 @@ app.delete('/api/v1.0/events/:event_id', async(req, res) => {
 	} else {
 		res.status(400).send("There was an error deleting your event\n")
 	}
+})
+
+// GET Request to retrieve all events
+app.get('/api/v1.0/articles_and_events', async(req, res) => {
+
+	// Call controller to retrieve all articles and all events
+	const articles = await articlesController.getAll()
+	const events = await eventsController.getAll()
+
+	const articlesAndEvents = articles.concat(events);
+	res.status(200).send(articlesAndEvents)
 })
 
 // Runs the server on provided port

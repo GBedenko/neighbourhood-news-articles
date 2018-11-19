@@ -41,6 +41,20 @@ exports.getAll = async() => {
     return events
 }
 
+// Function to retrieve all articles
+exports.getByQuery = async(queryObject) => {
+
+    // Declare a function which will call the controller for all articles
+    // Returns a Promise object with either a resolve or reject value
+    const events = database.findResourceFromCollection(databaseURL, eventsCollection, queryObject)
+                    .then((results) => results) // Obtains the result from the Promise object
+    
+    // Calls the results function, waits for response before continuing
+    const eventsResponse = await events
+
+    return eventsResponse
+}
+
 // Function to update a event
 exports.update = async(eventID, newEventDetailsObject) => {
 
