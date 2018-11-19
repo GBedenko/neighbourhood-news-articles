@@ -137,5 +137,16 @@ app.delete('/api/v1.0/events/:event_id', async(req, res) => {
 	}
 })
 
+// GET Request to retrieve all events
+app.get('/api/v1.0/articles_and_events', async(req, res) => {
+
+	// Call controller to retrieve all articles and all events
+	const articles = await articlesController.getAll()
+	const events = await eventsController.getAll()
+
+	const articlesAndEvents = articles.concat(events);
+	res.status(200).send(articlesAndEvents)
+})
+
 // Runs the server on provided port
 app.listen(port, () => console.log(`Server listening on port ${port}`));
