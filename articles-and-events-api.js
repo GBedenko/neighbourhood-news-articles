@@ -117,6 +117,9 @@ app.post('/api/v1.0/events', async(req, res) => {
 // PUT Request to update an event
 app.put('/api/v1.0/events/:event_id', async(req, res) => {
 
+	console.log(req.body)
+	delete req.body._id
+	
 	// Call controller to update an event at the provided id
 	const eventUpdateResponse = await eventsController.update(req.params.event_id, req.body)
 
