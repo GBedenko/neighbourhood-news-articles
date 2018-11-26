@@ -14,6 +14,8 @@ const port = 8081;
 const articlesController = require('./modules/articles-controller')
 const eventsController = require('./modules/events-controller')
 
+const notifyAdministrator = require('./modules/notify-administrator')
+
 // Home root currently redirects to /articles
 app.get('/api/v1.0/', (req, res) => {
 	res.redirect('/api/v1.0/articles')
@@ -24,7 +26,7 @@ app.get('/api/v1.0/articles', async(req, res) => {
 
 	// Call controller to retrieve all articles
 	// Waits for response from controller before continuing (async/await)
-	const articles = await articlesController.getAll()
+	const articles = await articlesController.getByQuery(req.body)
 
 	res.status(200).send(articles)
 })
@@ -44,7 +46,10 @@ app.post('/api/v1.0/articles', async(req, res) => {
 	// Call controller to create a new article from the provided request
 	// Once completed, run the callback which sends the client a message and status code confirming the article was created
 	const response = await articlesController.add(req.body)
-	
+
+	// Calls the function to email the admin, doesn't worry about recieving a response
+	notifyAdministrator.emailAdministrator()
+
 	if(response) {
 		res.status(200).send("Article added succesfully\n")
 	} else {
@@ -54,6 +59,9 @@ app.post('/api/v1.0/articles', async(req, res) => {
 
 // PUT Request to update a article
 app.put('/api/v1.0/articles/:article_id', async(req, res) => {
+	
+	console.log(req.body)
+	delete req.body._id
 
 	// Call controller to update an article at the provided id
 	const articleUpdateResponse = await articlesController.update(req.params.article_id, req.body)
@@ -83,7 +91,7 @@ app.get('/api/v1.0/events', async(req, res) => {
 
 	// Call controller to retrieve all events
 	// Waits for response from controller before continuing (async/await)
-	const events = await eventsController.getAll()
+	const events = await eventsController.getByQuery(req.body)
 
 	res.status(200).send(events)
 })
@@ -114,6 +122,9 @@ app.post('/api/v1.0/events', async(req, res) => {
 // PUT Request to update an event
 app.put('/api/v1.0/events/:event_id', async(req, res) => {
 
+	console.log(req.body)
+	delete req.body._id
+	
 	// Call controller to update an event at the provided id
 	const eventUpdateResponse = await eventsController.update(req.params.event_id, req.body)
 
@@ -135,6 +146,17 @@ app.delete('/api/v1.0/events/:event_id', async(req, res) => {
 	} else {
 		res.status(400).send("There was an error deleting your event\n")
 	}
+})
+
+// GET Request to retrieve all events
+app.get('/api/v1.0/articles_and_events', async(req, res) => {
+
+	// Call controller to retrieve all articles and all events
+	const articles = await articlesController.getAll()
+	const events = await eventsController.getAll()
+
+	const articlesAndEvents = articles.concat(events);
+	res.status(200).send(articlesAndEvents)
 })
 
 // Runs the server on provided port

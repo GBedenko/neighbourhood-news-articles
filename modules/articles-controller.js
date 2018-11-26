@@ -42,6 +42,21 @@ exports.getAll = async() => {
     return articlesResponse
 }
 
+// Function to retrieve all articles
+exports.getByQuery = async(queryObject) => {
+
+    // Declare a function which will call the controller for all articles
+    // Returns a Promise object with either a resolve or reject value
+    const articles = database.findResourceFromCollection(databaseURL, articlesCollection, queryObject)
+                    .then((results) => results) // Obtains the result from the Promise object
+    
+    // Calls the results function, waits for response before continuing
+    const articlesResponse = await articles
+
+    // Return the list of articles
+    return articlesResponse
+}
+
 // Function to update a article
 exports.update = async(articleID, newArticleDetailsObject) => {
 
