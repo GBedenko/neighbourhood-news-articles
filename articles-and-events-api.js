@@ -1,163 +1,191 @@
+#!/usr/bin/env node
+
 'use strict'
 
 console.log("Booting Up Articles and Events API Server...")
 
-// Using express as my web server, create instance and set attributes
-const express = require('express')
-const app = express()
-app.use(express.json())
+// Import koa packages
+const Koa = require('koa')
+const Router = require('koa-router')
+const bodyParser = require('koa-bodyparser')
 
-// Port this server will run on
-const port = 8081;
+// Setup koa packages
+const app = new Koa()
+app.use(bodyParser())
+const router = new Router()
 
-// Module which contains the business logic for articles
+// Import package used to assign status codes for responses easily
+const status = require('http-status-codes')
+
+// Port used for this microservice
+const port = 8081
+
+// Import modules for communicating with articles and events backend
 const articlesController = require('./modules/articles-controller')
 const eventsController = require('./modules/events-controller')
 
+// Module to email admin when article/event created
 const notifyAdministrator = require('./modules/notify-administrator')
 
-// Home root currently redirects to /articles
-app.get('/api/v1.0/', (req, res) => {
-	res.redirect('/api/v1.0/articles')
+// Allow connections only from localhost, inform client requests the content type is json
+app.use( async(ctx, next) => {
+	ctx.set('Access-Control-Allow-Origin', 'localhost')
+	ctx.set('content-type', 'application/json')
+	await next()
 })
 
-// GET Request to retrieve all articles
-app.get('/api/v1.0/articles', async(req, res) => {
+// GET Requests for all Articles
+router.get('/api/v1.0/articles', async ctx => {
 
-	// Call controller to retrieve all articles
-	// Waits for response from controller before continuing (async/await)
-	const articles = await articlesController.getAll(req.body)
+	// Allow only get requests to this endpoint function
+	ctx.set('Allow', 'GET')
+		
+	// Request the articles object from the controller
+	const articles = await articlesController.getAll(ctx.request.body)
 
-	res.status(200).send(articles)
+	// Assign the status code to 200 and response body object as all the articles
+	ctx.status = status.OK
+	ctx.body = articles
 })
 
-// GET Request to retrieve one article
-app.get('/api/v1.0/articles/:article_id', async(req, res) => {
+// GET Request for one Article
+router.get('/api/v1.0/articles/:article_id', async ctx => {
 
-	// Call controller to retrieve one article
-	const article = await articlesController.getById(req.params.article_id)
+	// Allow only get requests to this endpoint function
+	ctx.set('Allow', 'GET')
+	
+	// Request one article object from the controller using the provided id
+	const article = await articlesController.getById(ctx.params.article_id)
 
-	res.status(200).json(article)	
+	// Assign the status code to 200 and response body object as the found article
+	ctx.status = status.OK
+	ctx.body = article
 })
 
-// POST Request to create a new article
-app.post('/api/v1.0/articles', async(req, res) => {
+// POST Request for a new Article
+router.post('/api/v1.0/articles', async ctx => {
 
-	// Call controller to create a new article from the provided request
-	// Once completed, run the callback which sends the client a message and status code confirming the article was created
-	const response = await articlesController.add(req.body)
+	// Allow only post requests to this endpoint function
+	ctx.set('Allow', 'POST')
+	
+	// Send the new article object to the controller using the client request body
+	const addArticleResponse = await articlesController.add(ctx.request.body)
 
 	// Calls the function to email the admin, doesn't worry about recieving a response
 	notifyAdministrator.emailAdministrator()
 
-	if(response) {
-		res.status(200).send("Article added succesfully\n")
-	} else {
-		res.status(400).send("There was an error posting your article\n")
-	}
+	// Assign the status code to 201 and response body object as a boolean to confirm the article was added
+	ctx.status = status.CREATED
+	ctx.body = {status: 'success', articleAddedSuccessfully: addArticleResponse}
 })
 
-// PUT Request to update a article
-app.put('/api/v1.0/articles/:article_id', async(req, res) => {
+// PUT Request to update an existing Article
+router.put('/api/v1.0/articles/:article_id', async ctx => {
+
+	// Allow only put requests to this endpoint function
+	ctx.set('Allow', 'PUT')
+
+	// Send the updated article object to the controller using the client request body for the provided article id
+	const updateArticleResponse = await articlesController.update(ctx.params.article_id, ctx.request.body)
+
+	// Assign the status code to 201 and response body object as a boolean to confirm the article was updated
+	ctx.status = status.CREATED
+	ctx.body = {status: 'success', articleUpdatedSuccessfully: updateArticleResponse}
+})
+
+// DELETE Request to remove an existing Article
+router.del('/api/v1.0/articles/:article_id', async ctx => {
 	
-	console.log(req.body)
-	delete req.body._id
+	// Allow only delete requests to this endpoint function
+	ctx.set('Allow', 'DELETE')
+		
+	// Request the provided article id's object to be deleted by the controller
+	const deleteArticleResponse = await articlesController.delete(ctx.params.article_id)
 
-	// Call controller to update an article at the provided id
-	const articleUpdateResponse = await articlesController.update(req.params.article_id, req.body)
-
-	if(articleUpdateResponse) {
-		res.status(200).send("article with id: " + req.params.article_id + " has been updated\n")
-	} else {
-		res.status(400).send("There was an error updating your article\n")
-	}	
+	// Assign the status code to 200 and response body object as a boolean to confirm the article was deleted
+	ctx.status = status.OK
+	ctx.body = {status: 'success', articleDeletedSuccessfully: deleteArticleResponse}
 })
 
-// DELETE Request to delete one article
-app.delete('/api/v1.0/articles/:article_id', async(req, res) => {
+// GET Requests for all Events
+router.get('/api/v1.0/events', async ctx => {
 
-	// Call controller to delete an article corresponding to the HTML request's article id
-	const articleDeleteResponse = await articlesController.delete(req.params.article_id)
+	// Allow only get requests to this endpoint function
+	ctx.set('Allow', 'GET')
+		
+	// Request the events object from the controller
+	const events = await eventsController.getAll(ctx.request.body)
 
-	if(articleDeleteResponse) {
-		res.status(200).send("article with id: " + req.params.article_id + " has been deleted\n")
-	} else {
-		res.status(400).send("There was an error deleting your article\n")
-	}
+	// Assign the status code to 200 and response body object as all the events
+	ctx.status = status.OK
+	ctx.body = events
 })
 
-// GET Request to retrieve all events
-app.get('/api/v1.0/events', async(req, res) => {
+// GET Request for one Event
+router.get('/api/v1.0/events/:event_id', async ctx => {
 
-	// Call controller to retrieve all events
-	// Waits for response from controller before continuing (async/await)
-	const events = await eventsController.getAll(req.body)
-
-	res.status(200).send(events)
-})
-
-// GET Request to retrieve one event
-app.get('/api/v1.0/events/:event_id', async(req, res) => {
-
-	// Call controller to retrieve one event
-	const event = await eventsController.getById(req.params.event_id)
-
-	res.status(200).json(event)
-})
-
-// POST Request to create a new event
-app.post('/api/v1.0/events', async(req, res) => {
-
-	// Call controller to create a new event from the provided request
-	// Once completed, run the callback which sends the client a message and status code confirming the event was created
-	const eventCreateResponse = await eventsController.add(req.body)
-
-	if(eventCreateResponse) {
-		res.status(200).send("Event added succesfully\n")
-	} else {
-		res.status(400).send("There was an error posting your event\n")
-	}
-})
-
-// PUT Request to update an event
-app.put('/api/v1.0/events/:event_id', async(req, res) => {
-
-	console.log(req.body)
-	delete req.body._id
+	// Allow only get requests to this endpoint function
+	ctx.set('Allow', 'GET')
 	
-	// Call controller to update an event at the provided id
-	const eventUpdateResponse = await eventsController.update(req.params.event_id, req.body)
+	// Request one event object from the controller using the provided id
+	const event = await eventsController.getById(ctx.params.event_id)
 
-	if(eventUpdateResponse) {
-		res.status(200).send("Event with id: " + req.params.event_id + " has been updated\n")
-	} else {
-		res.status(400).send("There was an error updating your event\n")
-	}
+	// Assign the status code to 200 and response body object as the found event
+	ctx.status = status.OK
+	ctx.body = event
 })
 
-// DELETE Request to delete one event
-app.delete('/api/v1.0/events/:event_id', async(req, res) => {
+// POST Request for a new Event
+router.post('/api/v1.0/events', async ctx => {
 
-	// Call controller to delete an event corresponding to the HTML request's event id
-	const eventDeleteResponse = await eventsController.delete(req.params.event_id)
+	// Allow only post requests to this endpoint function
+	ctx.set('Allow', 'POST')
+	
+	// Send the new event object to the controller using the client request body
+	const addEventResponse = await eventsController.add(ctx.request.body)
 
-	if(eventDeleteResponse) {
-		res.status(200).send("Event with id: " + req.params.event_id + " has been deleted\n")
-	} else {
-		res.status(400).send("There was an error deleting your event\n")
-	}
+	// Calls the function to email the admin, doesn't worry about recieving a response
+	notifyAdministrator.emailAdministrator()
+
+	// Assign the status code to 201 and response body object as a boolean to confirm the event was added
+	ctx.status = status.CREATED
+	ctx.body = {status: 'success', eventAddedSuccessfully: addEventResponse}
 })
 
-// GET Request to retrieve all events
-app.get('/api/v1.0/articles_and_events', async(req, res) => {
+// PUT Request to update an existing Event
+router.put('/api/v1.0/events/:event_id', async ctx => {
 
-	// Call controller to retrieve all articles and all events
-	const articles = await articlesController.getAll()
-	const events = await eventsController.getAll()
+	// Allow only put requests to this endpoint function
+	ctx.set('Allow', 'PUT')
 
-	const articlesAndEvents = articles.concat(events);
-	res.status(200).send(articlesAndEvents)
+	// Send the updated event object to the controller using the client request body for the provided event id
+	const updateEventResponse = await eventsController.update(ctx.params.event_id, ctx.request.body)
+
+	// Assign the status code to 201 and response body object as a boolean to confirm the event was updated
+	ctx.status = status.CREATED
+	ctx.body = {status: 'success', eventUpdatedSuccessfully: updateEventResponse}
 })
 
-// Runs the server on provided port
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+// DELETE Request to remove an existing Event
+router.del('/api/v1.0/events/:event_id', async ctx => {
+	
+	// Allow only delete requests to this endpoint function
+	ctx.set('Allow', 'DELETE')
+		
+	// Request the provided event id's object to be deleted by the controller
+	const deleteEventResponse = await eventsController.delete(ctx.params.event_id)
+
+	// Assign the status code to 200 and response body object as a boolean to confirm the event was deleted
+	ctx.status = status.OK
+	ctx.body = {status: 'success', eventDeletedSuccessfully: deleteEventResponse}
+})
+
+// Assign all routes/endpoints to the Koa server
+app.use(router.routes())
+app.use(router.allowedMethods())
+
+// Run the server, show helpful message to know which port it is running on
+const server = app.listen(port, () => console.log(`Server listening on port ${port}`))
+
+// Export the endpoints module so that it can be tested
+module.exports = server
