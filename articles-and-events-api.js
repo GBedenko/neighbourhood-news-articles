@@ -26,7 +26,7 @@ app.get('/api/v1.0/articles', async(req, res) => {
 
 	// Call controller to retrieve all articles
 	// Waits for response from controller before continuing (async/await)
-	const articles = await articlesController.getByQuery(req.body)
+	const articles = await articlesController.getAll(req.body)
 
 	res.status(200).send(articles)
 })
@@ -91,7 +91,7 @@ app.get('/api/v1.0/events', async(req, res) => {
 
 	// Call controller to retrieve all events
 	// Waits for response from controller before continuing (async/await)
-	const events = await eventsController.getByQuery(req.body)
+	const events = await eventsController.getAll(req.body)
 
 	res.status(200).send(events)
 })
