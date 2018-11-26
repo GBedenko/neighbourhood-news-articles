@@ -14,6 +14,8 @@ const port = 8081;
 const articlesController = require('./modules/articles-controller')
 const eventsController = require('./modules/events-controller')
 
+const notifyAdministrator = require('./modules/notify-administrator')
+
 // Home root currently redirects to /articles
 app.get('/api/v1.0/', (req, res) => {
 	res.redirect('/api/v1.0/articles')
@@ -44,7 +46,10 @@ app.post('/api/v1.0/articles', async(req, res) => {
 	// Call controller to create a new article from the provided request
 	// Once completed, run the callback which sends the client a message and status code confirming the article was created
 	const response = await articlesController.add(req.body)
-	
+
+	// Calls the function to email the admin, doesn't worry about recieving a response
+	notifyAdministrator.emailAdministrator()
+
 	if(response) {
 		res.status(200).send("Article added succesfully\n")
 	} else {
