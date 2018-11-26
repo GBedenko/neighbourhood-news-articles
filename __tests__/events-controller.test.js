@@ -36,7 +36,7 @@ describe('Get one event controller functionality', () => {
 
 	test('Recieving a get request for one event recieves one event response from the database', async done => {
 
-                // expect.assertions(1)
+                expect.assertions(1)
                 
                 const response = await eventsController.getById("1234")
 
@@ -50,7 +50,7 @@ describe('Update event controller functionality', () => {
 
 	test('Recieving a put request for one event recieves a success response from the database', async done => {
 
-                // expect.assertions(1)
+                expect.assertions(1)
                 
                 const response = await eventsController.update("1234", {"title":"Test Title"})
 
@@ -64,7 +64,7 @@ describe('Delete event controller functionality', () => {
 
 	test('Recieving a delete request for one event recieves a success response from the database', async done => {
 
-                // expect.assertions(1)
+                expect.assertions(1)
                 
                 const response = await eventsController.delete("1234")
 

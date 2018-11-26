@@ -44,7 +44,7 @@ exports.getAll = async(queryObject) => {
 
 // Function to update a article
 exports.update = async(articleID, newArticleDetailsObject) => {
-
+    
     const updateArticle = database.updateResource(databaseURL, articlesCollection, articleID, newArticleDetailsObject)
                             .then((article) => article)
 

@@ -81,7 +81,7 @@ router.post('/api/v1.0/articles', async ctx => {
 
 // PUT Request to update an existing Article
 router.put('/api/v1.0/articles/:article_id', async ctx => {
-
+	
 	// Allow only put requests to this endpoint function
 	ctx.set('Allow', 'PUT')
 
