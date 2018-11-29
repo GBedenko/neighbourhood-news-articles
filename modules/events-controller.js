@@ -28,21 +28,67 @@ exports.getById = async(eventId) => {
 }
 
 // Function to retrieve all events
-exports.getAll = async() => {
+exports.getAll = async(queryObject) => {
 
-    const getEvents = database.getAllFromCollection(databaseURL, eventsCollection)
-                        .then((events) => events) // Obtains the result from the Promise object
+    let eventsResponse = {}
 
-    const events = getEvents
+    // Used if the client's request had a sort value
+    let sortCriteria = {}
 
-    return events
+    if(queryObject.sort == undefined) {
+
+        // Declare a function which will call the controller for all events
+        // Returns a Promise object with either a resolve or reject value
+        const events = database.getAllFromCollection(databaseURL, eventsCollection, queryObject, sortCriteria)
+                        .then((results) => results) // Obtains the result from the Promise object
+        
+        // Calls the results function, waits for response before continuing
+        eventsResponse = await events
+
+    } else {
+
+        if(queryObject.sort == "highest_rated") {
+
+            // Mongodb sort object to sort by likes descending (highest to lowest)
+            sortCriteria = {likes: -1}
+    
+            // Delete the sort value as it will now be sent to db in a seperate object
+            delete queryObject.sort
+    
+            // Send the normal query and sort object as well
+            const events = database.getAllFromCollection(databaseURL, eventsCollection, queryObject, sortCriteria)
+                            .then((results) => results)
+                
+            // Calls the results function, waits for response before continuing
+            eventsResponse = await events
+    
+        } else {
+    
+            // Mongodb sort object to sort by likes ascending order (lowest to highest)
+            sortCriteria = {likes: 1}
+    
+            // Delete the sort value as it will now be sent to db in a seperate object
+            delete queryObject.sort
+    
+            // Send the normal query and sort object as well
+            const events = database.getAllFromCollection(databaseURL, eventsCollection, queryObject, sortCriteria)
+                            .then((results) => results)
+                
+            // Calls the results function, waits for response before continuing
+            eventsResponse = await events
+    
+        }
+    }    
+    
+    // Return the list of events
+    return eventsResponse
 }
 
 // Function to update a event
 exports.update = async(eventID, newEventDetailsObject) => {
 
     const updateEvent = database.updateResource(databaseURL, eventsCollection, eventID, newEventDetailsObject)
-                            .then((article) => article)
+                            .then((event) => event)
 
     const updateEventResponse = await updateEvent
 

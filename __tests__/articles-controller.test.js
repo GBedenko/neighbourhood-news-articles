@@ -24,7 +24,29 @@ describe('Get all articles controller functionality', () => {
 
                 expect.assertions(1)
                 
-                const response = await articlesController.getAll()
+                const response = await articlesController.getAll({}, {})
+                
+                expect(response).toEqual([{"_id": 1234, "name": "Test Resource"}])
+                
+                done()
+	})
+
+        test('GET Request for highest_rated articles', async done => {
+
+                expect.assertions(1)
+                
+                const response = await articlesController.getAll({sort: "highest_rated"})
+                
+                expect(response).toEqual([{"_id": 1234, "name": "Test Resource"}])
+                
+                done()
+	})
+
+        test('GET Request for lowest_rated articles', async done => {
+
+                expect.assertions(1)
+                
+                const response = await articlesController.getAll({sort: "lowest_rated"})
                 
                 expect(response).toEqual([{"_id": 1234, "name": "Test Resource"}])
                 
