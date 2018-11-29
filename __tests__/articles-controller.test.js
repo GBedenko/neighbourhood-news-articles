@@ -26,7 +26,7 @@ describe('Get all articles controller functionality', () => {
                 
                 const response = await articlesController.getAll()
                 
-                expect(response).toEqual([{"_id": 1234, "heading":"Test Heading"}])
+                expect(response).toEqual([{"_id": 1234, "name": "Test Resource"}])
                 
                 done()
 	})
@@ -40,7 +40,7 @@ describe('Get one article controller functionality', () => {
                 
                 const response = await articlesController.getById("1234")
 
-                expect(response).toEqual({"_id": 1234, "heading":"Test Heading"})
+                expect(response).toEqual({"_id": 1234, "name": "Test Resource"})
                 
                 done()
 	})

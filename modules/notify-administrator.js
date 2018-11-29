@@ -19,11 +19,5 @@ exports.emailAdministrator = () => {
         text: 'Please check the Local News Application and approve the new content someone created: http://localhost:8080/admin_dashboard'
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Email sent: ' + info.response);
-      }
-    });
+    transporter.sendMail(mailOptions)
 }

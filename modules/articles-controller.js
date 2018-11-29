@@ -28,26 +28,11 @@ exports.getById = async(articleId) => {
 }
 
 // Function to retrieve all articles
-exports.getAll = async() => {
+exports.getAll = async(queryObject) => {
 
     // Declare a function which will call the controller for all articles
     // Returns a Promise object with either a resolve or reject value
-    const articles = database.getAllFromCollection(databaseURL, articlesCollection)
-                    .then((results) => results) // Obtains the result from the Promise object
-    
-    // Calls the results function, waits for response before continuing
-    const articlesResponse = await articles
-
-    // Return the list of articles
-    return articlesResponse
-}
-
-// Function to retrieve all articles
-exports.getByQuery = async(queryObject) => {
-
-    // Declare a function which will call the controller for all articles
-    // Returns a Promise object with either a resolve or reject value
-    const articles = database.findResourceFromCollection(databaseURL, articlesCollection, queryObject)
+    const articles = database.getAllFromCollection(databaseURL, articlesCollection, queryObject)
                     .then((results) => results) // Obtains the result from the Promise object
     
     // Calls the results function, waits for response before continuing
@@ -59,7 +44,7 @@ exports.getByQuery = async(queryObject) => {
 
 // Function to update a article
 exports.update = async(articleID, newArticleDetailsObject) => {
-
+    
     const updateArticle = database.updateResource(databaseURL, articlesCollection, articleID, newArticleDetailsObject)
                             .then((article) => article)
 
