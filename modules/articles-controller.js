@@ -30,16 +30,57 @@ exports.getById = async(articleId) => {
 // Function to retrieve all articles
 exports.getAll = async(queryObject) => {
 
-    // Declare a function which will call the controller for all articles
-    // Returns a Promise object with either a resolve or reject value
-    const articles = database.getAllFromCollection(databaseURL, articlesCollection, queryObject)
-                    .then((results) => results) // Obtains the result from the Promise object
-    
-    // Calls the results function, waits for response before continuing
-    const articlesResponse = await articles
+    // Used if the client's request had a sort value
+    let sortCriteria = {}
 
-    // Return the list of articles
-    return articlesResponse
+    if(queryObject.sort == "highest_rated") {
+
+        // Mongodb sort object to sort by likes descending (highest to lowest)
+        sortCriteria = {likes: -1}
+
+        // Delete the sort value as it will now be sent to db in a seperate object
+        delete queryObject.sort
+
+        // Send the normal query and sort object as well
+        const articles = database.getAllFromCollection(databaseURL, articlesCollection, queryObject, sortCriteria)
+                        .then((results) => results)
+            
+        // Calls the results function, waits for response before continuing
+        const articlesResponse = await articles
+
+        // Return the list of articles which will be sorted
+        return articlesResponse
+
+    } else if(queryObject.sort == "lowest_rated") {
+
+        // Mongodb sort object to sort by likes ascending order (lowest to highest)
+        sortCriteria = {likes: 1}
+
+        // Delete the sort value as it will now be sent to db in a seperate object
+        delete queryObject.sort
+
+        // Send the normal query and sort object as well
+        const articles = database.getAllFromCollection(databaseURL, articlesCollection, queryObject, sortCriteria)
+                        .then((results) => results)
+            
+        // Calls the results function, waits for response before continuing
+        const articlesResponse = await articles
+
+        // Return the list of articles which will be sorted
+        return articlesResponse
+    } else {
+
+        // Declare a function which will call the controller for all articles
+        // Returns a Promise object with either a resolve or reject value
+        const articles = database.getAllFromCollection(databaseURL, articlesCollection, queryObject, sortCriteria)
+                        .then((results) => results) // Obtains the result from the Promise object
+        
+        // Calls the results function, waits for response before continuing
+        const articlesResponse = await articles
+
+        // Return the list of articles
+        return articlesResponse
+    }
 }
 
 // Function to update a article

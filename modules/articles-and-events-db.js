@@ -26,7 +26,7 @@ exports.addResourceToCollection = (databaseURL, collectionName, newResource) => 
 })
 
 // Retrieve all resources from a given collection
-exports.getAllFromCollection = (databaseURL, collectionName, resourceObject) => new Promise((resolve, reject) => {
+exports.getAllFromCollection = (databaseURL, collectionName, resourceObject, sortObject) => new Promise((resolve, reject) => {
 
     // Connect to the mongodb database
     // Once done, runs the callback to execute the query to find all resources in the given collection
@@ -37,13 +37,12 @@ exports.getAllFromCollection = (databaseURL, collectionName, resourceObject) => 
 
         // Mongodb query to find all resources from the collection and save it to an array called results
         // Once completed, pass the result as the parameter to the callback function
-        dbo.collection(collectionName).find(resourceObject).toArray((err, result) => {
+        dbo.collection(collectionName).find(resourceObject).sort(sortObject).toArray((err, result) => {
             db.close()
             resolve(result)
         });
     });
 })
-
 
 // Retrieve a specific resource from a collection
 exports.getResourceFromCollection = (databaseURL, collectionName, resourceID) => new Promise((resolve, reject) => {
