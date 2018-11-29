@@ -62,7 +62,7 @@ exports.getAll = async(queryObject) => {
             // Calls the results function, waits for response before continuing
             articlesResponse = await articles
     
-        } else if(queryObject.sort == "lowest_rated") {
+        } else {
     
             // Mongodb sort object to sort by likes ascending order (lowest to highest)
             sortCriteria = {likes: 1}
