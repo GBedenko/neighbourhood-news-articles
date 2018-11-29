@@ -9,7 +9,7 @@ articlesAndEventsDB.addResourceToCollection = (databaseURL, collectionName, newR
 })
 
 // Mock retrieve all resources from a given collection
-articlesAndEventsDB.getAllFromCollection = (databaseURL, collectionName) => new Promise((resolve, reject) => {
+articlesAndEventsDB.getAllFromCollection = (databaseURL, collectionName, resourceObject, sortObject) => new Promise((resolve, reject) => {
 
     resolve([{"_id": 1234 , "name": "Test Resource"}])
 })
@@ -19,7 +19,6 @@ articlesAndEventsDB.getResourceFromCollection = (databaseURL, collectionName, re
 
     resolve({"_id": 1234, "name": "Test Resource"})
 })
-
 
 // Mock update a resource with the provided ID and new values object
 articlesAndEventsDB.updateResource = (databaseURL, collectionName, resourceID, newValuesObject) => new Promise((resolve, reject) => {

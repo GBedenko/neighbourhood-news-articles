@@ -24,7 +24,29 @@ describe('Get all events controller functionality', () => {
 
                 expect.assertions(1)
                 
-                const response = await eventsController.getAll()
+                const response = await eventsController.getAll({}, {})
+                
+                expect(response).toEqual([{"_id": 1234, "name": "Test Resource"}])
+                
+                done()
+	})
+
+        test('GET Request for highest_rated events', async done => {
+
+                expect.assertions(1)
+                
+                const response = await eventsController.getAll({sort: "highest_rated"})
+                
+                expect(response).toEqual([{"_id": 1234, "name": "Test Resource"}])
+                
+                done()
+	})
+
+        test('GET Request for lowest_rated events', async done => {
+
+                expect.assertions(1)
+                
+                const response = await eventsController.getAll({sort: "lowest_rated"})
                 
                 expect(response).toEqual([{"_id": 1234, "name": "Test Resource"}])
                 
