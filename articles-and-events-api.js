@@ -72,7 +72,7 @@ router.post('/api/v1.0/articles', async ctx => {
 	const addArticleResponse = await articlesController.add(ctx.request.body)
 
 	// Calls the function to email the admin, doesn't worry about recieving a response
-	notifyAdministrator.emailAdministrator()
+	// notifyAdministrator.emailAdministrator()
 
 	// Assign the status code to 201 and response body object as a boolean to confirm the article was added
 	ctx.status = status.CREATED
