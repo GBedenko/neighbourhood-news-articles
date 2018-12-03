@@ -24,9 +24,6 @@ const port = 8081
 const articlesController = require('./modules/articles-controller')
 const eventsController = require('./modules/events-controller')
 
-// Module to email admin when article/event created
-const notifyAdministrator = require('./modules/notify-administrator')
-
 // Allow connections only from localhost, inform client requests the content type is json
 app.use( async(ctx, next) => {
 	ctx.set('Access-Control-Allow-Origin', 'localhost')
@@ -70,9 +67,6 @@ router.post('/api/v1.0/articles', async ctx => {
 
 	// Send the new article object to the controller using the client request body
 	const addArticleResponse = await articlesController.add(ctx.request.body)
-
-	// Calls the function to email the admin, doesn't worry about recieving a response
-	// notifyAdministrator.emailAdministrator()
 
 	// Assign the status code to 201 and response body object as a boolean to confirm the article was added
 	ctx.status = status.CREATED
@@ -143,9 +137,6 @@ router.post('/api/v1.0/events', async ctx => {
 
 	// Send the new event object to the controller using the client request body
 	const addEventResponse = await eventsController.add(ctx.request.body)
-
-	// Calls the function to email the admin, doesn't worry about recieving a response
-	notifyAdministrator.emailAdministrator()
 
 	// Assign the status code to 201 and response body object as a boolean to confirm the event was added
 	ctx.status = status.CREATED

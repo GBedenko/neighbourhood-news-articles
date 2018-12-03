@@ -5,6 +5,9 @@ const eventsCollection = 'events'
 
 const database = require('./articles-and-events-db')
 
+// Module to email admin when article/event created
+const notifyAdministrator = require('./notify-administrator')
+
 // Function to add a new event
 exports.add = async(eventObject) => {
 
@@ -12,6 +15,9 @@ exports.add = async(eventObject) => {
 		.then((result) => result)
 
 	const addEventResponse = await addEvent
+
+	// Calls the function to email the admin, doesn't worry about recieving a response
+	notifyAdministrator.emailAdministrator()
 
 	return addEventResponse
 }
