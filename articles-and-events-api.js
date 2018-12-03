@@ -2,7 +2,7 @@
 
 'use strict'
 
-console.log("Booting Up Articles and Events API Server...")
+console.log('Booting Up Articles and Events API Server...')
 
 // Import koa packages
 const Koa = require('koa')
@@ -39,7 +39,7 @@ router.get('/api/v1.0/articles', async ctx => {
 
 	// Allow only get requests to this endpoint function
 	ctx.set('Allow', 'GET')
-		
+
 	// Request the articles object from the controller
 	const articles = await articlesController.getAll(ctx.request.body)
 
@@ -53,7 +53,7 @@ router.get('/api/v1.0/articles/:article_id', async ctx => {
 
 	// Allow only get requests to this endpoint function
 	ctx.set('Allow', 'GET')
-	
+
 	// Request one article object from the controller using the provided id
 	const article = await articlesController.getById(ctx.params.article_id)
 
@@ -67,7 +67,7 @@ router.post('/api/v1.0/articles', async ctx => {
 
 	// Allow only post requests to this endpoint function
 	ctx.set('Allow', 'POST')
-	
+
 	// Send the new article object to the controller using the client request body
 	const addArticleResponse = await articlesController.add(ctx.request.body)
 
@@ -81,7 +81,7 @@ router.post('/api/v1.0/articles', async ctx => {
 
 // PUT Request to update an existing Article
 router.put('/api/v1.0/articles/:article_id', async ctx => {
-	
+
 	// Allow only put requests to this endpoint function
 	ctx.set('Allow', 'PUT')
 
@@ -95,10 +95,10 @@ router.put('/api/v1.0/articles/:article_id', async ctx => {
 
 // DELETE Request to remove an existing Article
 router.del('/api/v1.0/articles/:article_id', async ctx => {
-	
+
 	// Allow only delete requests to this endpoint function
 	ctx.set('Allow', 'DELETE')
-		
+
 	// Request the provided article id's object to be deleted by the controller
 	const deleteArticleResponse = await articlesController.delete(ctx.params.article_id)
 
@@ -112,7 +112,7 @@ router.get('/api/v1.0/events', async ctx => {
 
 	// Allow only get requests to this endpoint function
 	ctx.set('Allow', 'GET')
-		
+
 	// Request the events object from the controller
 	const events = await eventsController.getAll(ctx.request.body)
 
@@ -126,7 +126,7 @@ router.get('/api/v1.0/events/:event_id', async ctx => {
 
 	// Allow only get requests to this endpoint function
 	ctx.set('Allow', 'GET')
-	
+
 	// Request one event object from the controller using the provided id
 	const event = await eventsController.getById(ctx.params.event_id)
 
@@ -140,7 +140,7 @@ router.post('/api/v1.0/events', async ctx => {
 
 	// Allow only post requests to this endpoint function
 	ctx.set('Allow', 'POST')
-	
+
 	// Send the new event object to the controller using the client request body
 	const addEventResponse = await eventsController.add(ctx.request.body)
 
@@ -168,10 +168,10 @@ router.put('/api/v1.0/events/:event_id', async ctx => {
 
 // DELETE Request to remove an existing Event
 router.del('/api/v1.0/events/:event_id', async ctx => {
-	
+
 	// Allow only delete requests to this endpoint function
 	ctx.set('Allow', 'DELETE')
-		
+
 	// Request the provided event id's object to be deleted by the controller
 	const deleteEventResponse = await eventsController.delete(ctx.params.event_id)
 
