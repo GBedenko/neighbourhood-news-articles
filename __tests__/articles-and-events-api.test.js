@@ -33,6 +33,15 @@ describe('GET /articles endpoint', async() => {
         expect(response.body).toEqual([{"_id": 1234, "heading": "Test Heading"}])
 
         done()
+	})  
+
+	test('Requesting all articles with a query returns an array of objects', async done => {
+
+        const response = await request(articlesAndEventsAPI).get("/api/v1.0/articles").send({"heading": "Queried Heading"});
+
+        expect(response.body).toEqual([{"_id": 2345, "heading": "Queried Heading"}])
+
+        done()
 	})
 })
 
@@ -44,7 +53,7 @@ describe('GET /articles/:article_id endpoint', async() => {
     });
 
     // Test that a request recieves the correct status code
-	test('Requesting a article returns a 200 status code', async done => {
+	test('Requesting an article returns a 200 status code', async done => {
 
         const response = await request(articlesAndEventsAPI).get("/api/v1.0/articles/123")
 
@@ -54,11 +63,20 @@ describe('GET /articles/:article_id endpoint', async() => {
     })    
 
     // Test that the request recieves the correct JSON response
-	test('Requesting a article returns a json object', async done => {
+	test('Requesting an article returns a json object', async done => {
 
         const response = await request(articlesAndEventsAPI).get("/api/v1.0/articles/123");
 
         expect(response.body).toEqual({"_id": 1234, "heading": "Test Heading"})
+
+        done()
+	})
+
+	test('Requesting an article that doesnt exist returns an empty object', async done => {
+
+        const response = await request(articlesAndEventsAPI).get("/api/v1.0/articles/6666");
+
+        expect(response.body).toEqual({})
 
         done()
 	})
@@ -89,6 +107,15 @@ describe('POST /articles endpoint', async() => {
         expect(response.body).toEqual({"status": "success", "articleAddedSuccessfully": true})
 
         done()
+	})    
+
+	test('Sending an empty article returns a failed post request', async done => {
+
+        const response = await request(articlesAndEventsAPI).post("/api/v1.0/articles").send({})
+
+        expect(response.body).toEqual({"status": "fail", "articleAddedSuccessfully": false})
+
+        done()
 	})
 })
 
@@ -115,6 +142,15 @@ describe('PUT /articles/:article_id endpoint', async() => {
         const response = await request(articlesAndEventsAPI).put("/api/v1.0/articles/1234").send({"_id": 1234, "heading": "Updated Heading"})
 
         expect(response.body).toEqual({"status": "success", "articleUpdatedSuccessfully": true})
+
+        done()
+	}) 
+
+	test('Updating a article with an empty new object recieves a failed put request', async done => {
+
+        const response = await request(articlesAndEventsAPI).put("/api/v1.0/articles/1234").send({})
+
+        expect(response.body).toEqual({"status": "fail", "articleUpdatedSuccessfully": false})
 
         done()
 	})
@@ -146,6 +182,15 @@ describe('DELETE /articles/:article_id endpoint', async() => {
 
         done()
     })
+
+	test('Deleting a article that doesnt exist returns a failed delete request', async done => {
+
+        const response = await request(articlesAndEventsAPI).del("/api/v1.0/articles/6666")
+
+        expect(response.body).toEqual({"status": "fail", "articleDeletedSuccessfully": false})
+
+        done()
+    })
 })
 
 // Test GET /events
@@ -171,6 +216,15 @@ describe('GET /events endpoint', async() => {
         const response = await request(articlesAndEventsAPI).get("/api/v1.0/events");
 
         expect(response.body).toEqual([{"_id": 1234, "title": "Test Title"}])
+
+        done()
+	})    
+
+	test('Requesting all events with a query returns an array of objects', async done => {
+
+        const response = await request(articlesAndEventsAPI).get("/api/v1.0/events").send({"title": "Queried Title"});
+
+        expect(response.body).toEqual([{"_id": 2345, "title": "Queried Title"}])
 
         done()
 	})
@@ -202,6 +256,15 @@ describe('GET /events/:event_id endpoint', async() => {
 
         done()
 	})
+
+	test('Requesting a event that doesnt exist returns an empty object', async done => {
+
+        const response = await request(articlesAndEventsAPI).get("/api/v1.0/events/6666");
+
+        expect(response.body).toEqual({})
+
+        done()
+	})
 })
 
 // Test POST /events
@@ -227,6 +290,15 @@ describe('POST /events endpoint', async() => {
         const response = await request(articlesAndEventsAPI).post("/api/v1.0/events").send({"_id": 1234, "title": "Test Title"})
 
         expect(response.body).toEqual({"status": "success", "eventAddedSuccessfully": true})
+
+        done()
+	})  
+
+	test('Sending an empty event returns a failed post request', async done => {
+
+        const response = await request(articlesAndEventsAPI).post("/api/v1.0/events").send({})
+
+        expect(response.body).toEqual({"status": "fail", "eventAddedSuccessfully": false})
 
         done()
 	})
@@ -257,6 +329,15 @@ describe('PUT /events/:event_id endpoint', async() => {
         expect(response.body).toEqual({"status": "success", "eventUpdatedSuccessfully": true})
 
         done()
+	}) 
+
+	test('Updating a event with an empty new object recieves a failed put request', async done => {
+
+        const response = await request(articlesAndEventsAPI).put("/api/v1.0/events/1234").send({})
+
+        expect(response.body).toEqual({"status": "fail", "eventUpdatedSuccessfully": false})
+
+        done()
 	})
 })
 
@@ -283,6 +364,15 @@ describe('DELETE /events/:event_id endpoint', async() => {
         const response = await request(articlesAndEventsAPI).del("/api/v1.0/events/1234")
 
         expect(response.body).toEqual({"status": "success", "eventDeletedSuccessfully": true})
+
+        done()
+    })
+
+	test('Deleting a event that doesnt exist returns a failed delete request', async done => {
+
+        const response = await request(articlesAndEventsAPI).del("/api/v1.0/events/6666")
+
+        expect(response.body).toEqual({"status": "fail", "eventDeletedSuccessfully": false})
 
         done()
     })

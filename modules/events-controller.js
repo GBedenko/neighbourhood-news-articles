@@ -13,6 +13,7 @@ exports.add = async(eventObject) => {
 
 	const addEvent = database.addResourceToCollection(databaseURL, eventsCollection, eventObject)
 		.then((result) => result)
+		.catch((reason) => reason)
 
 	const addEventResponse = await addEvent
 
@@ -27,6 +28,7 @@ exports.getById = async(eventId) => {
 
 	const getEvent = database.getResourceFromCollection(databaseURL, eventsCollection, eventId)
 		.then((event) => event)
+		.catch((reason) => reason)
 
 	const event = await getEvent
 
@@ -95,6 +97,7 @@ exports.update = async(eventID, newEventDetailsObject) => {
 
 	const updateEvent = database.updateResource(databaseURL, eventsCollection, eventID, newEventDetailsObject)
 		.then((event) => event)
+		.catch((reason) => reason)
 
 	const updateEventResponse = await updateEvent
 
@@ -105,6 +108,8 @@ exports.update = async(eventID, newEventDetailsObject) => {
 exports.delete = async(eventID) => {
 
 	const deleteEvent = database.deleteResource(databaseURL, eventsCollection, eventID)
+		.then((article) => article)
+		.catch((reason) => reason)
 
 	const deleteEventResponse = await deleteEvent
 

@@ -13,6 +13,7 @@ exports.add = async(articleObject) => {
 
 	const addArticle = database.addResourceToCollection(databaseURL, articlesCollection, articleObject)
 		.then((result) => result)
+		.catch((reason) => reason)
 
 	const addArticleResponse = await addArticle
 
@@ -27,6 +28,7 @@ exports.getById = async(articleId) => {
 
 	const getArticle = database.getResourceFromCollection(databaseURL, articlesCollection, articleId)
 		.then((article) => article)
+		.catch((reason) => reason)
 
 	const article = await getArticle
 
@@ -95,6 +97,7 @@ exports.update = async(articleID, newArticleDetailsObject) => {
 
 	const updateArticle = database.updateResource(databaseURL, articlesCollection, articleID, newArticleDetailsObject)
 		.then((article) => article)
+		.catch((reason) => reason)
 
 	const updateArticleResponse = await updateArticle
 
@@ -106,6 +109,7 @@ exports.delete = async(articleID) => {
 
 	const deleteArticle = database.deleteResource(databaseURL, articlesCollection, articleID)
 		.then((article) => article)
+		.catch((reason) => reason)
 
 	const deleteArticleResponse = await deleteArticle
 

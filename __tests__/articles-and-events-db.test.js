@@ -221,3 +221,72 @@ describe('Finding a resource in a mongodb collection', async() => {
         done()
 	})
 })
+
+describe('Requesting database interactions with incorrect credentials', async() => {
+
+    test('Adding a new article with incorrect database credentials returns a rejected database connection', async done => {
+        
+        // Send a test article object to the correct database
+        const response = await articlesAndEventsDB.addResourceToCollection("mongodb://wrongurl:27017/articles_and_events_database",
+                                                                           "articles",
+                                                                           {"Heading":"Test Heading"})
+                                                                           .then((result) => result)
+                                                                           .catch((reason) => reason)       
+        
+        expect(response).toEqual(Error('Unable to connect to MongoDB'))
+        
+        done()
+    })
+    
+    test('Requesting a article with incorrect database credentials returns a rejected database connection', async done => {
+        
+        const response = await articlesAndEventsDB.getResourceFromCollection("mongodb://wrongurl:27017/articles_and_events_database",
+                                                                             "articles",
+                                                                             1234)
+                                                                             .then((response) => response) 
+                                                                             .catch((reason) => reason)      
+        
+        expect(response).toEqual(Error('Unable to connect to MongoDB'))
+        
+        done()
+    })
+    
+    test('Requesting all articles with incorrect database credentials returns a rejected database connection', async done => {
+        
+        const response = await articlesAndEventsDB.getAllFromCollection("mongodb://wrongurl:27017/articles_and_events_database",
+                                                                             "articles")
+                                                                             .then((response) => response) 
+                                                                             .catch((reason) => reason)      
+        
+        expect(response).toEqual(Error('Unable to connect to MongoDB'))
+        
+        done()
+    })
+    
+    test('Updating a article with incorrect database credentials returns a rejected database connection', async done => {
+        
+        const response = await articlesAndEventsDB.updateResource("mongodb://wrongurl:27017/articles_and_events_database",
+                                                                             "articles",
+                                                                             1234,
+                                                                             {"Heading":"Test Heading"})
+                                                                             .then((response) => response) 
+                                                                             .catch((reason) => reason)      
+        
+        expect(response).toEqual(Error('Unable to connect to MongoDB'))
+        
+        done()
+	})
+    
+    test('Deleting a article with incorrect database credentials returns a rejected database connection', async done => {
+        
+        const response = await articlesAndEventsDB.deleteResource("mongodb://wrongurl:27017/articles_and_events_database",
+                                                                             "articles",
+                                                                             1234)
+                                                                             .then((response) => response) 
+                                                                             .catch((reason) => reason)      
+        
+        expect(response).toEqual(Error('Unable to connect to MongoDB'))
+        
+        done()
+	})
+})

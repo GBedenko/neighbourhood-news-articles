@@ -5,41 +5,55 @@ const articlesController = jest.genMockFromModule('../articles-controller')
 // Mock adding a new article response
 articlesController.add = async(articleObject) => {
 
-	const response = true
-
-	return response
+	if(Object.keys(articleObject).length == 0) {
+		return false
+	} else {
+		return true
+	}
 }
 
 // Mock retrieving one article
 articlesController.getById = async(articleID) => {
 
-	const response = {'_id': 1234, heading: 'Test Heading'}
+	const mockedInvalidID = 6666
 
-	return response
+	if(articleID == mockedInvalidID) {
+		return {}
+	} else {
+		return {'_id': 1234, heading: 'Test Heading'}
+	}
 }
 
 // Mock retrieving all articles
 articlesController.getAll = async(queryObject) => {
 
-	const response = [{'_id': 1234, 'heading': 'Test Heading'}]
-
-	return response
+	if(Object.keys(queryObject).length == 0) {
+		return [{'_id': 1234, 'heading': 'Test Heading'}]
+	} else {
+		return [{'_id': 2345, 'heading': 'Queried Heading'}]
+	}
 }
 
 // Mock updating a article response
 articlesController.update = async(articleID, newArticleDetailsObject) => {
 
-	const response = true
-
-	return response
+	if(Object.keys(newArticleDetailsObject).length == 0) {
+		return false
+	} else {
+		return true
+	}
 }
 
 // Mock deleting a article response
 articlesController.delete = async(articleID) => {
 
-	const response = true
+	const mockedInvalidID = 6666
 
-	return response
+	if(articleID == mockedInvalidID) {
+		return false
+	} else {
+		return true
+	}
 }
 
 module.exports = articlesController

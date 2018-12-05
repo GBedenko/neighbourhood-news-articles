@@ -68,9 +68,15 @@ router.post('/api/v1.0/articles', async ctx => {
 	// Send the new article object to the controller using the client request body
 	const addArticleResponse = await articlesController.add(ctx.request.body)
 
-	// Assign the status code to 201 and response body object as a boolean to confirm the article was added
-	ctx.status = status.CREATED
-	ctx.body = {status: 'success', articleAddedSuccessfully: addArticleResponse}
+	if(addArticleResponse) {
+		// Assign the status code to 201 and response body object as a boolean to confirm the article was added
+		ctx.status = status.CREATED
+		ctx.body = {status: 'success', articleAddedSuccessfully: addArticleResponse}
+	} else {
+
+		ctx.status = status.BAD_REQUEST
+		ctx.body = {status: 'fail', articleAddedSuccessfully: addArticleResponse}
+	}
 })
 
 // PUT Request to update an existing Article
@@ -82,9 +88,14 @@ router.put('/api/v1.0/articles/:article_id', async ctx => {
 	// Send the updated article object to the controller using the client request body for the provided article id
 	const updateArticleResponse = await articlesController.update(ctx.params.article_id, ctx.request.body)
 
-	// Assign the status code to 201 and response body object as a boolean to confirm the article was updated
-	ctx.status = status.CREATED
-	ctx.body = {status: 'success', articleUpdatedSuccessfully: updateArticleResponse}
+	if(updateArticleResponse) {
+		// Assign the status code to 201 and response body object as a boolean to confirm the article was updated
+		ctx.status = status.CREATED
+		ctx.body = {status: 'success', articleUpdatedSuccessfully: updateArticleResponse}
+	} else {
+		ctx.status = status.BAD_REQUEST
+		ctx.body = {status: 'fail', articleUpdatedSuccessfully: updateArticleResponse}
+	}
 })
 
 // DELETE Request to remove an existing Article
@@ -96,9 +107,14 @@ router.del('/api/v1.0/articles/:article_id', async ctx => {
 	// Request the provided article id's object to be deleted by the controller
 	const deleteArticleResponse = await articlesController.delete(ctx.params.article_id)
 
-	// Assign the status code to 200 and response body object as a boolean to confirm the article was deleted
-	ctx.status = status.OK
-	ctx.body = {status: 'success', articleDeletedSuccessfully: deleteArticleResponse}
+	if(deleteArticleResponse) {
+		// Assign the status code to 200 and response body object as a boolean to confirm the article was deleted
+		ctx.status = status.OK
+		ctx.body = {status: 'success', articleDeletedSuccessfully: deleteArticleResponse}
+	} else {
+		ctx.status = status.BAD_REQUEST
+		ctx.body = {status: 'fail', articleDeletedSuccessfully: deleteArticleResponse}
+	}
 })
 
 // GET Requests for all Events
@@ -138,9 +154,15 @@ router.post('/api/v1.0/events', async ctx => {
 	// Send the new event object to the controller using the client request body
 	const addEventResponse = await eventsController.add(ctx.request.body)
 
-	// Assign the status code to 201 and response body object as a boolean to confirm the event was added
-	ctx.status = status.CREATED
-	ctx.body = {status: 'success', eventAddedSuccessfully: addEventResponse}
+	if(addEventResponse) {
+		// Assign the status code to 201 and response body object as a boolean to confirm the event was added
+		ctx.status = status.CREATED
+		ctx.body = {status: 'success', eventAddedSuccessfully: addEventResponse}
+	} else {
+
+		ctx.status = status.BAD_REQUEST
+		ctx.body = {status: 'fail', eventAddedSuccessfully: addEventResponse}
+	}
 })
 
 // PUT Request to update an existing Event
@@ -152,9 +174,14 @@ router.put('/api/v1.0/events/:event_id', async ctx => {
 	// Send the updated event object to the controller using the client request body for the provided event id
 	const updateEventResponse = await eventsController.update(ctx.params.event_id, ctx.request.body)
 
-	// Assign the status code to 201 and response body object as a boolean to confirm the event was updated
-	ctx.status = status.CREATED
-	ctx.body = {status: 'success', eventUpdatedSuccessfully: updateEventResponse}
+	if(updateEventResponse) {
+		// Assign the status code to 201 and response body object as a boolean to confirm the event was updated
+		ctx.status = status.CREATED
+		ctx.body = {status: 'success', eventUpdatedSuccessfully: updateEventResponse}
+	} else {
+		ctx.status = status.BAD_REQUEST
+		ctx.body = {status: 'fail', eventUpdatedSuccessfully: updateEventResponse}
+	}
 })
 
 // DELETE Request to remove an existing Event
@@ -166,9 +193,14 @@ router.del('/api/v1.0/events/:event_id', async ctx => {
 	// Request the provided event id's object to be deleted by the controller
 	const deleteEventResponse = await eventsController.delete(ctx.params.event_id)
 
-	// Assign the status code to 200 and response body object as a boolean to confirm the event was deleted
-	ctx.status = status.OK
-	ctx.body = {status: 'success', eventDeletedSuccessfully: deleteEventResponse}
+	if(deleteEventResponse) {
+		// Assign the status code to 200 and response body object as a boolean to confirm the event was deleted
+		ctx.status = status.OK
+		ctx.body = {status: 'success', eventDeletedSuccessfully: deleteEventResponse}
+	} else {
+		ctx.status = status.BAD_REQUEST
+		ctx.body = {status: 'fail', eventDeletedSuccessfully: deleteEventResponse}
+	}
 })
 
 // Assign all routes/endpoints to the Koa server
