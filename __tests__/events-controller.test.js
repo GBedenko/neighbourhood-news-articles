@@ -7,12 +7,19 @@ jest.mock('../modules/articles-and-events-db')
 describe('Add events controller functionality', async() => {
 
 	test('Recieving a new event sends it to the database', async done => {
-
-                expect.assertions(1)
                 
                 const response = await eventsController.add({"title":"Test Title"})
 
                 expect(response).toBeTruthy()
+                
+                done()
+	})
+        
+	test('Adding an empty event returns a failed request to the database', async done => {
+                
+                const addEventResponse = await eventsController.add({}).then((response) => response)
+
+                expect(addEventResponse).toEqual(Error('Trying to add an empty object'))
                 
                 done()
 	})
@@ -66,6 +73,15 @@ describe('Get one event controller functionality', () => {
                 
                 done()
 	})
+        
+	test('Requesting the database for a event that doesnt exist returns a failed request from the database', async done => {
+                
+                const response = await eventsController.getById("6666")
+
+                expect(response).toEqual(Error('Trying to request an object that doesnt exist'))
+                
+                done()
+	})
 })
 
 describe('Update event controller functionality', () => {
@@ -80,6 +96,24 @@ describe('Update event controller functionality', () => {
                 
                 done()
 	})
+        
+	test('Updating a event with an empty new event object recieves a failed response from the database', async done => {
+                
+                const response = await eventsController.update("1234", {})
+
+                expect(response).toEqual(Error('Trying to update an object with an empty object'))
+                
+                done()
+	})
+        
+	test('Updating a event that doesnt exist recieves a failed response from the database', async done => {
+                
+                const response = await eventsController.update("6666", {"event":"test event updated"})
+
+                expect(response).toEqual(Error('Trying to request an object that doesnt exist'))
+                
+                done()
+	})
 })
 
 describe('Delete event controller functionality', () => {
@@ -91,6 +125,15 @@ describe('Delete event controller functionality', () => {
                 const response = await eventsController.delete("1234")
 
                 expect(response).toBeTruthy()
+                
+                done()
+	})
+        
+	test('Deleting a event that doesnt exist recieves a failed response from the database', async done => {
+                
+                const response = await eventsController.delete("6666")
+
+                expect(response).toEqual(Error('Trying to request an object that doesnt exist'))
                 
                 done()
 	})

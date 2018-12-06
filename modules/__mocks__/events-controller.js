@@ -1,45 +1,59 @@
 'use strict'
 
-const eventsController = jest.genMockFromModule('../events-controller');
+const eventsController = jest.genMockFromModule('../events-controller')
 
 // Mock adding a new event response
 eventsController.add = async(eventObject) => {
-    
-    const response = true
 
-    return response
+	if(Object.keys(eventObject).length == 0) {
+		return false
+	} else {
+		return true
+	}
 }
 
 // Mock retrieving one event
 eventsController.getById = async(eventID) => {
 
-    const response = {"_id": 1234, title: "Test Title"}
+	const mockedInvalidID = 6666
 
-    return response
+	if(eventID == mockedInvalidID) {
+		return {}
+	} else {
+		return {'_id': 1234, title: 'Test Title'}
+	}
 }
 
 // Mock retrieving all events
 eventsController.getAll = async(queryObject) => {
 
-    const response = [{"_id": 1234, "title": "Test Title"}]
-
-    return response
+	if(Object.keys(queryObject).length == 0) {
+		return [{'_id': 1234, 'title': 'Test Title'}]
+	} else {
+		return [{'_id': 2345, 'title': 'Queried Title'}]
+	}
 }
 
 // Mock updating a event response
 eventsController.update = async(eventID, newEventDetailsObject) => {
 
-    const response = true
-
-    return response
+	if(Object.keys(newEventDetailsObject).length == 0) {
+		return false
+	} else {
+		return true
+	}
 }
 
 // Mock deleting a event response
 eventsController.delete = async(eventID) => {
 
-    const response = true
+	const mockedInvalidID = 6666
 
-    return response
+	if(eventID == mockedInvalidID) {
+		return false
+	} else {
+		return true
+	}
 }
 
-module.exports = eventsController;
+module.exports = eventsController
